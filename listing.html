@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Danh sách xe - LOCALGO</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    :root {
+      --main-color: #00bfa5;
+    }
+    body {
+      background-color: #f8f9fa;
+    }
+    .navbar {
+      background: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .navbar-brand {
+      color: var(--main-color) !important;
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+    .car-card img {
+      height: 200px;
+      object-fit: cover;
+      border-top-left-radius: .75rem;
+      border-top-right-radius: .75rem;
+    }
+    .car-card {
+      border: none;
+      border-radius: .75rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform .2s;
+      position: relative;
+    }
+    .car-card:hover {
+      transform: translateY(-4px);
+    }
+    .favorite-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.4rem;
+      color: #ddd;
+      cursor: pointer;
+    }
+    .favorite-btn.active {
+      color: #e53935;
+    }
+    .btn-primary {
+      background-color: var(--main-color);
+      border-color: var(--main-color);
+    }
+    .btn-primary:hover {
+      background-color: #009743;
+    }
+    .page-link {
+      color: var(--main-color);
+    }
+    .page-item.active .page-link {
+      background-color: var(--main-color);
+      border-color: var(--main-color);
+    }
+  </style>
+</head>
+<body>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">LOCALGO</a>
+      <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+          <li class="nav-item"><a class="nav-link fw-semibold" href="listing.html">Thuê xe</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold" href="upcar.html">Đăng xe</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold" href="dashboard.html">Quản lý</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold" href="chat.html">Chat</a></li>
+          <li class="nav-item ms-lg-3"><a href="#" class="btn btn-outline-primary btn-sm px-3">Đăng nhập</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <main class="container py-4">
+    <h2 class="fw-bold mb-4">Danh sách xe</h2>
+
+    <!-- Bộ lọc -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-3">
+        <select id="filterType" class="form-select">
+          <option value="">Tất cả</option>
+          <option value="self">Tự lái</option>
+          <option value="driver">Có tài xế</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <input id="filterLocation" type="text" class="form-control" placeholder="Địa điểm (VD: Hà Nội)">
+      </div>
+      <div class="col-md-3">
+        <input id="filterMaxPrice" type="number" class="form-control" placeholder="Giá tối đa /ngày (VND)">
+      </div>
+      <div class="col-md-3 d-grid">
+        <button id="btnFilter" class="btn btn-primary">Lọc kết quả</button>
+      </div>
+    </div>
+
+    <!-- Danh sách xe -->
+    <div id="carGrid" class="row g-4"></div>
+
+    <!-- Pagination -->
+    <nav>
+      <ul id="pagination" class="pagination justify-content-center mt-4"></ul>
+    </nav>
+  </main>
+
+  <!-- Modal Chi tiết -->
+  <div class="modal fade" id="carModal" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Chi tiết xe</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <img id="modalImg" src="" class="img-fluid rounded mb-3" alt="Car Image">
+          <h4 id="modalName"></h4>
+          <p id="modalInfo" class="text-muted"></p>
+          <p id="modalPrice" class="fw-bold text-success"></p>
+          <p><strong>Mô tả:</strong> <span id="modalDesc"></span></p>
+        </div>
+        <div class="modal-footer" style="display: flex;">
+          <a href="car.html?id=1"><button class="btn btn-secondary">Chi tiết xe</button></a>
+          <a href="contract.html"><button class="btn btn-primary">Thuê ngay</button></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-light py-3 mt-5">
+    <div class="container text-center text-muted small">
+      © 2025 LOCALGO — Demo website thuê xe ô tô.
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const carGrid = document.getElementById('carGrid');
+    const pagination = document.getElementById('pagination');
+    const modal = new bootstrap.Modal('#carModal');
+    const favoriteCars = JSON.parse(localStorage.getItem('favorites') || '[]');
+
+    const cars = [
+      { id:1, name:"Toyota Vios 2022", price:850000, type:"self", location:"Hà Nội", img:"https://cdn2.mioto.vn/m/vehicle/2022/12/06/10/BfW8C8TkR2p4F9d8t9cQoQ.jpg", desc:"Xe tiết kiệm nhiên liệu, phù hợp gia đình." },
+      { id:2, name:"Kia Sedona 2021", price:1200000, type:"driver", location:"TP.HCM", img:"https://cdn2.mioto.vn/m/vehicle/2023/03/09/17/hN3q7CMfKMUdJvF5W6lHiw.jpg", desc:"Xe 7 chỗ sang trọng, có tài xế riêng." },
+      { id:3, name:"Mazda CX5 2020", price:950000, type:"self", location:"Đà Nẵng", img:"https://cdn2.mioto.vn/m/vehicle/2022/09/01/10/X7n6CNgT0ZK3qvV09AqA9Q.jpg", desc:"Xe thể thao mạnh mẽ, thiết kế hiện đại." },
+      { id:4, name:"Mercedes E300", price:2500000, type:"driver", location:"Hà Nội", img:"https://cdn2.mioto.vn/m/vehicle/2022/08/03/15/MbDplZnlOrH4Q2X5uU3q9Q.jpg", desc:"Xe hạng sang cao cấp cho doanh nhân." },
+      { id:5, name:"Honda City 2021", price:700000, type:"self", location:"TP.HCM", img:"https://cdn2.mioto.vn/m/vehicle/2022/08/19/15/t2Gf6Qn8gRO3yoEY3zq8zS.jpg", desc:"Xe tiết kiệm, nhỏ gọn, dễ lái." },
+      { id:6, name:"VinFast Lux A2.0", price:980000, type:"self", location:"Hải Phòng", img:"https://cdn2.mioto.vn/m/vehicle/2022/11/10/15/zV7k2jY6RQG8NqfD0sJ8wS.jpg", desc:"Xe Việt cao cấp, vận hành êm ái." },
+      { id:7, name:"Hyundai Tucson", price:1150000, type:"self", location:"Đà Nẵng", img:"https://cdn2.mioto.vn/m/vehicle/2022/09/01/10/X7n6CNgT0ZK3qvV09AqA9Q.jpg", desc:"SUV 5 chỗ rộng rãi, tiện nghi." },
+      { id:8, name:"BMW 530i 2020", price:3000000, type:"driver", location:"Hà Nội", img:"https://cdn2.mioto.vn/m/vehicle/2022/07/20/12/4PZkVHlT2kA1yMRx6vH8wR.jpg", desc:"Xe Đức sang trọng, tài xế chuyên nghiệp." },
+      { id:9, name:"Ford Ranger 2021", price:1300000, type:"self", location:"Cần Thơ", img:"https://cdn2.mioto.vn/m/vehicle/2022/07/11/09/pC1p8r4Y2qJ6fE2wP3o7kR.jpg", desc:"Bán tải mạnh mẽ, chở hàng tốt." },
+    ];
+
+    const perPage = 8;
+    let currentPage = 1;
+
+    function renderCars(list) {
+      carGrid.innerHTML = "";
+      const start = (currentPage - 1) * perPage;
+      const pageCars = list.slice(start, start + perPage);
+
+      pageCars.forEach(c => {
+        const card = document.createElement('div');
+        const isFav = favoriteCars.includes(c.id);
+        card.className = 'col-md-3';
+        card.innerHTML = `
+          <div class="card car-card h-100">
+            <i class="bi bi-heart-fill favorite-btn ${isFav ? 'active' : ''}" data-id="${c.id}"></i>
+            <img src="${c.img}" class="card-img-top" alt="${c.name}">
+            <div class="card-body">
+              <h5 class="card-title">${c.name}</h5>
+              <p class="text-muted mb-1"><i class="bi bi-geo-alt"></i> ${c.location}</p>
+              <p class="fw-semibold text-success mb-2">${c.price.toLocaleString()}đ / ngày</p>
+              <span class="badge bg-${c.type === 'self' ? 'success' : 'info'}">${c.type === 'self' ? 'Tự lái' : 'Có tài xế'}</span>
+            </div>
+            <div class="card-footer bg-white border-0 d-grid">
+              <button class="btn btn-outline-success view-btn" data-id="${c.id}">Xem chi tiết</button>
+            </div>
+          </div>
+        `;
+        carGrid.appendChild(card);
+      });
+      renderPagination(list);
+    }
+
+    function renderPagination(list) {
+      const totalPages = Math.ceil(list.length / perPage);
+      pagination.innerHTML = "";
+      for (let i = 1; i <= totalPages; i++) {
+        pagination.innerHTML += `
+          <li class="page-item ${i === currentPage ? 'active' : ''}">
+            <button class="page-link">${i}</button>
+          </li>`;
+      }
+      document.querySelectorAll('.page-item button').forEach((btn, idx) => {
+        btn.addEventListener('click', () => {
+          currentPage = idx + 1;
+          renderCars(list);
+        });
+      });
+    }
+
+    // Modal chi tiết
+    document.addEventListener('click', e => {
+      if (e.target.classList.contains('view-btn')) {
+        const car = cars.find(c => c.id == e.target.dataset.id);
+        document.getElementById('modalImg').src = car.img;
+        document.getElementById('modalName').textContent = car.name;
+        document.getElementById('modalInfo').textContent = `${car.location} • ${car.type === 'self' ? 'Tự lái' : 'Có tài xế'}`;
+        document.getElementById('modalPrice').textContent = `${car.price.toLocaleString()}đ / ngày`;
+        document.getElementById('modalDesc').textContent = car.desc;
+        modal.show();
+      }
+
+      // Yêu thích xe
+      if (e.target.classList.contains('favorite-btn')) {
+        const id = parseInt(e.target.dataset.id);
+        if (favoriteCars.includes(id)) {
+          favoriteCars.splice(favoriteCars.indexOf(id), 1);
+          e.target.classList.remove('active');
+        } else {
+          favoriteCars.push(id);
+          e.target.classList.add('active');
+        }
+        localStorage.setItem('favorites', JSON.stringify(favoriteCars));
+      }
+    });
+
+    // Lọc
+    document.getElementById('btnFilter').addEventListener('click', () => {
+      const type = document.getElementById('filterType').value;
+      const location = document.getElementById('filterLocation').value.toLowerCase();
+      const maxPrice = parseInt(document.getElementById('filterMaxPrice').value);
+      const filtered = cars.filter(c =>
+        (!type || c.type === type) &&
+        (!location || c.location.toLowerCase().includes(location)) &&
+        (!maxPrice || c.price <= maxPrice)
+      );
+      currentPage = 1;
+      renderCars(filtered);
+    });
+
+    renderCars(cars);
+  </script>
+</body>
+</html>

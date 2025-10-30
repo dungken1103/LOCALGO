@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hợp đồng thuê xe - LOCALGO</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --main-color: #00b894;
+    }
+    body {
+      background-color: #f8f9fa;
+    }
+    .navbar {
+      background: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .navbar-brand {
+      color: var(--main-color) !important;
+      font-weight: 700;
+    }
+    .contract-card {
+      background: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      padding: 2rem;
+      margin-top: 2rem;
+    }
+    .car-img {
+      width: 100%;
+      border-radius: 0.75rem;
+      object-fit: cover;
+      height: 220px;
+    }
+    .btn-primary {
+      background-color: var(--main-color);
+      border-color: var(--main-color);
+    }
+    .btn-primary:hover {
+      background-color: #009973;
+    }
+    .terms-box {
+      background: #f1f9f5;
+      border: 1px solid #d4ede0;
+      border-radius: .5rem;
+      padding: 1rem;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">LOCALGO</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+          <li class="nav-item"><a class="nav-link fw-semibold" href="listing.html">Thuê xe</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold" href="upcar.html">Đăng xe</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold" href="dashboard.html">Quản lý</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold" href="chat.html">Chat</a></li>
+          <li class="nav-item ms-lg-3"><a href="#" class="btn btn-outline-primary btn-sm px-3">Đăng nhập</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container my-4">
+    <h2 class="fw-bold mb-4">Hợp đồng thuê xe (Demo)</h2>
+
+    <div id="contractArea" class="contract-card">
+      <div class="row">
+        <div class="col-md-5">
+          <img src="https://cdn2.mioto.vn/m/vehicle/2022/12/06/10/BfW8C8TkR2p4F9d8t9cQoQ.jpg" class="car-img" alt="Car Image">
+        </div>
+        <div class="col-md-7">
+          <h4 class="fw-semibold mb-2">Toyota Vios 2022</h4>
+          <p class="text-muted mb-1">Biển số: 30G-56789</p>
+          <p class="mb-1"><strong>Loại xe:</strong> Tự lái</p>
+          <p class="mb-1"><strong>Thời gian thuê:</strong> 28/10/2025 - 30/10/2025</p>
+          <p class="mb-1"><strong>Địa điểm nhận xe:</strong> Hà Nội</p>
+          <p class="mb-3"><strong>Giá thuê:</strong> 850.000đ / ngày</p>
+          <hr>
+          <p><strong>Người thuê:</strong> Nguyễn Văn A</p>
+          <p><strong>Số điện thoại:</strong> 0901 234 567</p>
+          <p><strong>Email:</strong> nguyenvana@example.com</p>
+        </div>
+      </div>
+
+      <hr class="my-4">
+
+      <h5 class="fw-bold">Điều khoản thuê xe</h5>
+      <div class="terms-box mb-3">
+        <ul>
+          <li>Khách thuê chịu trách nhiệm bảo quản xe trong thời gian thuê.</li>
+          <li>Xe chỉ được sử dụng trong lãnh thổ Việt Nam.</li>
+          <li>Không cho thuê lại hoặc sử dụng xe vào mục đích trái pháp luật.</li>
+          <li>Trả xe đúng thời hạn, đúng tình trạng ban đầu (trừ hao mòn tự nhiên).</li>
+          <li>Đặt cọc 5.000.000đ hoặc giữ giấy tờ tuỳ thân bản gốc (tuỳ chính sách chủ xe).</li>
+        </ul>
+      </div>
+
+      <div class="form-check mb-3">
+        <input class="form-check-input" type="checkbox" id="agree">
+        <label class="form-check-label" for="agree">Tôi đồng ý với điều khoản thuê xe trên</label>
+      </div>
+
+      <button id="btnSign" class="btn btn-primary w-100 py-2">Ký hợp đồng & Tiếp tục thanh toán</button>
+      <p id="contractMsg" class="text-center text-muted mt-3 small"></p>
+    </div>
+  </main>
+
+  <footer class="bg-light py-3 mt-5">
+    <div class="container text-center text-muted small">
+      © 2025 LOCALGO — Demo website thuê xe ô tô.
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("btnSign").addEventListener("click", () => {
+      const agree = document.getElementById("agree").checked;
+      const msg = document.getElementById("contractMsg");
+
+      if (!agree) {
+        msg.textContent = "❌ Vui lòng đồng ý với điều khoản trước khi tiếp tục.";
+        msg.classList.add("text-danger");
+        return;
+      }
+
+      msg.textContent = "✅ Hợp đồng đã được ký! Đang chuyển đến trang thanh toán...";
+      msg.classList.remove("text-danger");
+      msg.classList.add("text-success");
+
+      setTimeout(() => {
+        window.location.href = "payment.html";
+      }, 1500);
+    });
+  </script>
+</body>
+</html>

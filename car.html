@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chi tiết xe - LOCALGO</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    :root {
+      --main-color: #00bfa5;
+    }
+    body {
+      background-color: #f8f9fa;
+    }
+    .navbar {
+      background: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    }
+    .navbar-brand {
+      color: var(--main-color) !important;
+      font-weight: 700;
+      font-size: 1.5rem;
+    }
+    .hero {
+      background: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1600') center/cover no-repeat;
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      color: #fff;
+      position: relative;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 650px;
+    }
+    .search-box {
+      background: #fff;
+      border-radius: 1rem;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+    }
+    .feature-icon {
+      color: var(--main-color);
+      font-size: 2rem;
+    }
+    .car-card img {
+      border-top-left-radius: .75rem;
+      border-top-right-radius: .75rem;
+      height: 200px;
+      object-fit: cover;
+    }
+    .car-card {
+      border: none;
+      border-radius: .75rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform .2s;
+    }
+    .car-card:hover {
+      transform: translateY(-4px);
+    }
+    .btn-primary {
+      background-color: var(--main-color);
+      border-color: var(--main-color);
+    }
+    .btn-primary:hover {
+      background-color: #009c8a;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+    <div class="container">
+      <a class="navbar-brand" href="index.html">LOCALGO</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+          <li class="nav-item"><a class="nav-link fw-semibold" href="listing.html">Thuê xe</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold" href="upcar.html">Đăng xe</a></li>
+          
+          <li class="nav-item"><a class="nav-link fw-semibold" href="dashboard.html">Quản lý</a></li>
+          <li class="nav-item"><a class="nav-link fw-semibold" href="chat.html">Chat</a></li>
+          <li class="nav-item ms-lg-3"><a href="#" class="btn btn-outline-primary btn-sm px-3">Đăng nhập</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container py-4">
+    <a href="listing.html" class="text-decoration-none mb-3 d-inline-block">&larr; Quay lại danh sách</a>
+    <div id="carDetail"></div>
+  </div>
+
+  <script>
+    const cars = JSON.parse(localStorage.getItem('carData') || 'null') || [
+      { id:1, name:"Toyota Vios 2022", price:850000, type:"Tự lái", location:"Hà Nội", rating:4.7, img:"https://cdn2.mioto.vn/m/vehicle/2022/12/06/10/BfW8C8TkR2p4F9d8t9cQoQ.jpg", desc:"Xe tiết kiệm xăng, có Bluetooth, camera lùi." }
+    ];
+    const params = new URLSearchParams(window.location.search);
+    const id = parseInt(params.get("id"));
+    const car = cars.find(c => c.id === id);
+
+    if(car){
+      document.getElementById('carDetail').innerHTML=`
+        <div class="row g-4 align-items-start">
+          <div class="col-md-6"><img src="${car.img}" class="img-fluid car-img"></div>
+          <div class="col-md-6">
+            <h3>${car.name}</h3>
+            <p><b>Địa điểm:</b> ${car.location}</p>
+            <p><b>Loại xe:</b> ${car.type}</p>
+            <p><b>Giá thuê:</b> ${car.price.toLocaleString()}đ / ngày</p>
+            <p>${car.desc}</p>
+            <button class="btn btn-success btn-lg w-100">Thanh toán ngay</button>
+          </div>
+        </div>
+        <div class="contract mt-5">
+          <h5 class="mb-3">📄 Hợp đồng thuê xe (demo)</h5>
+          <p>1. Bên A (Người thuê): [Tên bạn]</p>
+          <p>2. Bên B (Chủ xe): Anh Nguyễn Văn B</p>
+          <p>3. Thời gian thuê: 2 ngày (từ 01/11/2025 - 03/11/2025)</p>
+          <p>4. Tổng tiền: ${(car.price*2).toLocaleString()}đ</p>
+          <p>5. Xe giao tận nơi miễn phí trong bán kính 5km.</p>
+          <p>6. Vui lòng mang theo CCCD & GPLX khi nhận xe.</p>
+        </div>`;
+    } else {
+      document.getElementById('carDetail').innerHTML=`<div class="alert alert-danger">Không tìm thấy xe!</div>`;
+    }
+  </script>
+</body>
+</html>
