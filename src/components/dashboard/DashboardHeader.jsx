@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
-import ThemeToggle from "./ThemeToggle";
+import ThemeToggle from "../ThemeToggle";
 import { Link, useNavigate, NavLink } from "react-router-dom";
-import axios from "../services/axiosConfig";
+import axios from "../../services/axiosConfig";
 import { FaSignOutAlt } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";
-import useTheme from "../hooks/useTheme";
+import useTheme from "../../hooks/useTheme";
 
-export default function Header({ theme, toggleTheme }) {
+export default function DashboardHeader({ theme, toggleTheme }) {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
@@ -56,43 +56,11 @@ export default function Header({ theme, toggleTheme }) {
     >
       <div className="container mx-auto flex items-center justify-between gap-4 py-4 px-4">
         <div className="flex items-center gap-4">
-          <Link to="/" className="flex items-center gap-3">
-            <div
-              className={`w-10 h-10 rounded-md flex items-center justify-center font-bold ${
-                theme === "dark"
-                  ? "bg-gradient-to-r from-gray-700 to-gray-900 text-blue-200"
-                  : "bg-gradient-to-r from-blue-500 to-indigo-600 text-gray-50 dark:text-gray-950"
-              }`}
-            >
-              LG
-            </div>
-            <div className="hidden sm:block">
-              <div
-                className={`text-lg font-bold ${
-                  theme === "dark" ? "text-white" : "text-gray-900"
-                }`}
-              >
-                LocalGo
-              </div>
-              <div
-                className={`text-xs ${
-                  theme === "dark" ? "text-gray-400" : "text-gray-500"
-                }`}
-              >
-                Thuê xe ô tô nhanh chóng
-              </div>
-            </div>
-          </Link>
         </div>
 
         <div className="flex items-center gap-3">
           {user ? (
             <>
-              <nav className="hidden md:flex gap-6 text-sm text-slate-600 dark:text-slate-300">
-                <Link to="/fleet" className="hover:underline">
-                  Xe
-                </Link>
-              </nav>
               <div className="relative" ref={dropdownRef}>
                 <button
                   onClick={() => setOpen(!open)}

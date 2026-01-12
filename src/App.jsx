@@ -21,6 +21,7 @@ import DepositPage from "./pages/user/DepositPage.jsx";
 import WithdrawPage from "./pages/user/WithdrawPage.jsx";
 import NotFoundPage from "./pages/public/NotFoundPage.jsx";
 import GoogleLoginSuccess from "./components/GoogleLoginSuccess";
+import OwnerDashboardPage from "./pages/user/owner/OwnerDashboardPage";
 function App() {
   // initialize theme hook (keeps in localStorage and on <html> class)
   const { theme, toggleTheme } = useTheme();
@@ -46,6 +47,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/login-success" element={<GoogleLoginSuccess />} />
+      <Route path="/owner/dashboard" element={<OwnerDashboardPage />} />
       <Route path="/*" element={<NotFoundPage />} />
     </Routes>
   );
