@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import "./output.css";
 import App from "./App.jsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/public/Home.jsx";
 import CarDetails from "./pages/user/CarDetails.jsx";
 import Booking from "./pages/user/Booking.jsx";
@@ -35,7 +35,6 @@ const Main = () => (
               <Route path="/contract/:bookingId" element={<RentalContract />} />
               <Route path="/deposit" element={<DepositPage />} />
               <Route path="/withdraw" element={<WithdrawPage />} />
-              <Route path="/*" element={<NotFoundPage />} />
               <Route path="/" element={<Home />} />
               <Route path="/app" element={<App />} />
               <Route path="/car/:id" element={<CarDetails />} />
@@ -43,6 +42,7 @@ const Main = () => (
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/login-success" element={<GoogleLoginSuccess />} />
+              <Route path="/*" element={<NotFoundPage />} />
             </Routes>
           </Router>
         </ThemeProvider>
