@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Minimal CSS left — layout handled by Tailwind utilities. */
+/* Keep container size consistent for non-tailwind places */
+.container { max-width: 1100px; }
+

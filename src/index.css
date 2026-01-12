@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+html, body, #root { height: 100%; }
+body { margin: 0; font-family: system-ui, Avenir, Helvetica, Arial, sans-serif; }
+
+.container { max-width: 1100px; margin: 0 auto; }
+
+html {
+  scroll-behavior: smooth;
+}
+body {
+  background-color: white;
+  color: black;
+}
+
+html.dark body {
+  background-color: black;
+  color: white;
+}
+
+
