@@ -18,8 +18,8 @@ export default function AuthHeader({ theme, toggleTheme }) {
           
 
           <div className=" sm:flex gap-2 items-center">
-            <Link to="/#/login" className="text-sm rounded-md text-gray-700 dark:text-gray-200 hover:underline px-5">Đăng nhập</Link>
-            <Link to="/#/register" className="text-sm rounded-md bg-blue-500 hover:bg-blue-600 text-white px-5 py-1 ">Đăng ký</Link>
+            <Link to="/login" className="text-sm rounded-md text-gray-700 dark:text-gray-200 hover:underline px-5">Đăng nhập</Link>
+            <Link to="/register" className="text-sm rounded-md bg-blue-500 hover:bg-blue-600 text-white px-5 py-1 ">Đăng ký</Link>
           </div>
 
           <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
