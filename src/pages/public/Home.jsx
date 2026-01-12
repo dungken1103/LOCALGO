@@ -36,9 +36,9 @@ const Home = () => {
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{car.name}</h2>
                 <p className="text-lg text-gray-600 dark:text-gray-400">${car.price}/day</p>
                 <p className="text-sm text-gray-500 dark:text-gray-400">Địa điểm: {car.location}</p>
-                <a href={`/car/${car.id}`} className="block mt-4 text-center bg-blue-500 dark:bg-blue-600 text-white py-2 rounded hover:bg-blue-600 dark:hover:bg-blue-700 transition">
+                <Link to={`/car/${car.id}`} className="block mt-4 text-center bg-blue-500 dark:bg-blue-600 text-white py-2 rounded hover:bg-blue-600 dark:hover:bg-blue-700 transition">
                   Xem chi tiết
-                </a>
+                </Link>
               </div>
             </div>
           ))}
