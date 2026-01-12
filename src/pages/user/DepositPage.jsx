@@ -7,23 +7,22 @@ const ACCOUNT_NO = "43311032004";
 const ACCOUNT_NAME = "Tran Dinh Dung";
 
 export default function DepositPage() {
-  
   const [user, setUser] = useState(null);
   const [amount, setAmount] = useState("");
   const [txCode, setTxCode] = useState("");
   const [status, setStatus] = useState("IDLE"); // IDLE | PENDING | SUCCESS
   const [transactions, setTransactions] = useState([]);
   useEffect(() => {
-      const storedUser = localStorage.getItem("user");
-      if (storedUser) {
-        try {
-          const parsedUser = JSON.parse(storedUser);
-          setUser(parsedUser);
-        } catch (e) {
-          console.error("Error parsing user from localStorage:", e);
-        }
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+      } catch (e) {
+        console.error("Error parsing user from localStorage:", e);
       }
-    }, []);
+    }
+  }, []);
   const userId = user ? user.id : null;
 
   /* =========================
@@ -52,6 +51,7 @@ export default function DepositPage() {
     setTxCode(code);
     setStatus("PENDING");
 
+    // 1️⃣ Tạo giao dịch PENDING trên server
     await axios.post(
       "/wallet/handle",
       {
@@ -62,9 +62,19 @@ export default function DepositPage() {
       { withCredentials: true }
     );
 
+    // 2️⃣ Gọi webhook giả lập Sepay
+    await axios.post(
+      "/sepay/webhook",
+      {
+        amount: Number(amount),
+        sepayOrderId: code,
+        status: "SUCCESS",
+      },
+      { withCredentials: true }
+    );
+
     fetchTransactions();
   };
-  
 
   /* =========================
      QR LINK

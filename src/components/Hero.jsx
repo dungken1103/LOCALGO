@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 
 export default function Hero({ theme }) {
   const isDark = theme === "dark";
+  const [isLoading, setIsLoading] = useState(false);
 
   return (
     <section
@@ -11,8 +12,8 @@ export default function Hero({ theme }) {
           : "bg-gradient-to-r from-blue-50 to-blue-100"
       }
     >
+      {isLoading && <p>Loading...</p>}
       <div className="container mx-auto flex flex-col lg:flex-row items-center gap-8 py-20 px-4">
-
         {/* LEFT */}
         <div className="flex-1">
           <h1

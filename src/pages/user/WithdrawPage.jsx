@@ -8,16 +8,20 @@ const WithdrawPage = () => {
   const [amount, setAmount] = useState('');
   const [bankAccount, setBankAccount] = useState('');
   const [bankName, setBankName] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleWithdraw = () => {
+    setIsLoading(true);
     // Handle withdrawal logic here
     alert(`Rút tiền: ${amount} VNĐ từ tài khoản ${bankAccount} tại ${bankName}`);
+    setIsLoading(false);
   };
 
   return (
     <div className={`app-root ${theme} bg-gray-50 dark:bg-gray-900 min-h-screen`}>
       <Header theme={theme} toggleTheme={toggleTheme} />
       <main className="container mx-auto py-12 px-4 max-w-4xl">
+        {isLoading && <p>Loading...</p>}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-6">Rút tiền</h2>
           <div className="mb-4">

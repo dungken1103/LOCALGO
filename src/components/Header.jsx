@@ -10,17 +10,21 @@ export default function Header({ theme, toggleTheme }) {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const dropdownRef = useRef(null);
+
   useEffect(() => {
+    setIsLoading(true);
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
         setUser(parsedUser);
       } catch (e) {
-        console.error("Error parsing user from localStorage:", e);
+        console.error(e);
       }
     }
+    setIsLoading(false);
   }, []);
   const handleLogout = async () => {
     try {
@@ -172,6 +176,7 @@ export default function Header({ theme, toggleTheme }) {
           <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
         </div>
       </div>
+      {isLoading && <p>Loading...</p>}
     </header>
   );
 }

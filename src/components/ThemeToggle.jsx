@@ -1,16 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { Sun, Moon } from "lucide-react";
 
 const ThemeToggle = ({ theme, toggleTheme }) => {
   const isDark = theme === "dark";
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleToggle = () => {
+    setIsLoading(true);
+    toggleTheme();
+    setIsLoading(false);
+  };
 
   return (
     <div
-      onClick={toggleTheme}
+      onClick={handleToggle}
       className="w-[65px] h-[32px] bg-gray-300 dark:bg-gray-700
                  rounded-full flex items-center px-1 cursor-pointer
                  relative transition-all duration-300"
     >
+      {isLoading && <p>Loading...</p>}
       {/* Nút tròn */}
       <div
         className={`
