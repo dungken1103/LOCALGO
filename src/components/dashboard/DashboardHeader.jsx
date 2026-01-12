@@ -54,6 +54,7 @@ export default function DashboardHeader({ theme, toggleTheme }) {
         theme === "dark" ? "bg-gray-900" : "bg-white"
       }`}
     >
+        {/* <div className="flex items-center justify-between mb-6"></div> */}
       <div className="container mx-auto flex items-center justify-between gap-4 py-4 px-4">
         <div className="flex items-center gap-4">
         </div>

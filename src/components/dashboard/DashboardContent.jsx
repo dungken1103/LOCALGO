@@ -7,7 +7,7 @@ export default function DashboardContent() {
     { title: "Người dùng", value: 1200, icon: <FiUsers /> },
     { title: "Đơn hàng", value: 320, icon: <FiShoppingCart /> },
     { title: "Doanh thu", value: "$12,400", icon: <FiDollarSign /> },
-    { title: "Xe cho thuê", value: 58, icon: <FiTruck /> , text },
+    { title: "Xe cho thuê", value: 58, icon: <FiTruck />  },
   ];
 
   return (
