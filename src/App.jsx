@@ -22,6 +22,8 @@ import WithdrawPage from "./pages/user/WithdrawPage.jsx";
 import NotFoundPage from "./pages/public/NotFoundPage.jsx";
 import GoogleLoginSuccess from "./components/GoogleLoginSuccess";
 import OwnerDashboardPage from "./pages/user/owner/OwnerDashboardPage";
+import CarFormPage from "./pages/user/owner/CarFormPage";
+import CarListPage from "./pages/user/owner/CarListPage";
 function App() {
   // initialize theme hook (keeps in localStorage and on <html> class)
   const { theme, toggleTheme } = useTheme();
@@ -48,6 +50,9 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/login-success" element={<GoogleLoginSuccess />} />
       <Route path="/owner/dashboard" element={<OwnerDashboardPage />} />
+      <Route path="/owner/cars/new" element={<CarFormPage />} />
+      <Route path="/owner/cars/edit/:id" element={<CarFormPage isUpdate={true} />} />
+      <Route path="/owner/cars" element={<CarListPage />} />
       <Route path="/*" element={<NotFoundPage />} />
     </Routes>
   );

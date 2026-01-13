@@ -38,6 +38,7 @@ const Login = () => {
       const user = res.data.data.user;
 
       localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem('token', `Bearer ${res.data.data.token}`);
       setUser(user);
       navigate("/", { replace: true });
     } catch {

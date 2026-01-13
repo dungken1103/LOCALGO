@@ -33,6 +33,7 @@ export default function Header({ theme, toggleTheme }) {
 
       // Xóa dữ liệu ở localStorage
       localStorage.removeItem("user");
+      localStorage.removeItem("token");
 
       // Chuyển hướng và reset state
       navigate(`/`);

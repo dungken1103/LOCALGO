@@ -29,6 +29,7 @@ export default function DashboardHeader({ theme, toggleTheme }) {
 
       // Xóa dữ liệu ở localStorage
       localStorage.removeItem("user");
+      localStorage.removeItem("token");
 
       // Chuyển hướng và reset state
       navigate(`/`);

@@ -28,7 +28,7 @@ function GoogleLoginSuccess() {
       })
       .then(data => {
         localStorage.setItem('user', JSON.stringify(data));
-        localStorage.setItem('token', token);
+        localStorage.setItem('token', `Bearer ${token}`);
         navigate('/');
       })
       .catch(err => {

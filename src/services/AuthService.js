@@ -85,7 +85,7 @@ export const authService = {
 
   isAuthenticated() {
     if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('auth_token');
+      const token = localStorage.getItem('token');
       const user = localStorage.getItem('user');
       return Boolean(token && user);
     }
