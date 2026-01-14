@@ -23,7 +23,8 @@ import NotFoundPage from "./pages/public/NotFoundPage.jsx";
 import GoogleLoginSuccess from "./components/GoogleLoginSuccess";
 import OwnerDashboardPage from "./pages/user/owner/OwnerDashboardPage";
 import CarFormPage from "./pages/user/owner/CarFormPage";
-import CarListPage from "./pages/user/owner/CarListPage";
+import CarRentalPage from "./pages/CarRentalPage.jsx";
+import UserLayout from "./layouts/UserLayout";
 function App() {
   // initialize theme hook (keeps in localStorage and on <html> class)
   const { theme, toggleTheme } = useTheme();
@@ -36,23 +37,23 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/admin" element={<AdminDashboard />} />
-      <Route path="/owner" element={<OwnerDashboard />} />
-      <Route path="/chat/:ownerId" element={<ChatWithOwner />} />
-      <Route path="/contract/:bookingId" element={<RentalContract />} />
-      <Route path="/deposit" element={<DepositPage />} />
-      <Route path="/withdraw" element={<WithdrawPage />} />
+      <Route path="/admin" element={<UserLayout><AdminDashboard /></UserLayout>} />
+      <Route path="/owner" element={<UserLayout><OwnerDashboard /></UserLayout>} />
+      <Route path="/chat/:ownerId" element={<UserLayout><ChatWithOwner /></UserLayout>} />
+      <Route path="/contract/:bookingId" element={<UserLayout><RentalContract /></UserLayout>} />
+      <Route path="/deposit" element={<UserLayout><DepositPage /></UserLayout>} />
+      <Route path="/withdraw" element={<UserLayout><WithdrawPage /></UserLayout>} />
       <Route path="/" element={<Home />} />
       <Route path="/app" element={<App />} />
-      <Route path="/car/:id" element={<CarDetails />} />
-      <Route path="/bookings" element={<Booking />} />
+      <Route path="/car/:id" element={<UserLayout><CarDetails /></UserLayout>} />
+      <Route path="/bookings" element={<UserLayout><Booking /></UserLayout>} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/login-success" element={<GoogleLoginSuccess />} />
-      <Route path="/owner/dashboard" element={<OwnerDashboardPage />} />
-      <Route path="/owner/cars/new" element={<CarFormPage />} />
+      <Route path="/owner/dashboard" element={<UserLayout><OwnerDashboardPage /></UserLayout>} />
+      <Route path="/owner/cars/new" element={<UserLayout><CarFormPage /></UserLayout>} />
       <Route path="/owner/cars/edit/:id" element={<CarFormPage isUpdate={true} />} />
-      <Route path="/owner/cars" element={<CarListPage />} />
+      <Route path="/rental" element={<UserLayout><CarRentalPage /></UserLayout>} />
       <Route path="/*" element={<NotFoundPage />} />
     </Routes>
   );
