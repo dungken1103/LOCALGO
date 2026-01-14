@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import useTheme from "../../../hooks/useTheme";
 import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
-import axios from "axios";
 import api from "../../../services/axiosConfig";
 
 export default function CarFormPage({ car, isUpdate = false }) {

@@ -6,7 +6,7 @@ import { FaSignOutAlt } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";
 import useTheme from "../hooks/useTheme";
 
-export default function Header({ theme, toggleTheme }) {
+export default function UserHeader({ theme, toggleTheme }) {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
@@ -59,7 +59,7 @@ export default function Header({ theme, toggleTheme }) {
         theme === "dark" ? "bg-gray-900" : "bg-white"
       }`}
     >
-      <div className="container mx-auto flex items-center justify-between gap-4 py-4 px-4">
+       <div className="container mx-auto flex items-center justify-between gap-4 py-4 px-4">
         <div className="flex items-center gap-4">
           <Link to="/" className="flex items-center gap-3">
             <div
@@ -74,7 +74,7 @@ export default function Header({ theme, toggleTheme }) {
             <div className="hidden sm:block">
               <div
                 className={`text-lg font-bold ${
-                  theme === "dark" ? "text-orange-200" : "text-orange-600"
+                  theme === "dark" ? "text-white" : "text-gray-900"
                 }`}
               >
                 LocalGo
@@ -90,32 +90,13 @@ export default function Header({ theme, toggleTheme }) {
           </Link>
         </div>
 
-        {/* Thanh tìm kiếm */}
-        <div className="flex-1 max-w-md mx-4">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Tìm kiếm xe..."
-              className={`w-full pl-4 pr-10 py-2 rounded-lg border ${
-                theme === "dark"
-                  ? "bg-gray-700 border-gray-600 text-white placeholder-gray-400"
-                  : "bg-white border-gray-300 text-gray-900 placeholder-gray-500"
-              } focus:outline-none focus:ring-2 focus:ring-orange-500`}
-            />
-            <button className="absolute right-2 top-2 text-gray-400 hover:text-gray-600">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
-          </div>
-        </div>
 
         <div className="flex items-center gap-3">
           {user ? (
             <>
               <nav className="hidden md:flex gap-6 text-sm text-slate-600 dark:text-slate-300">
-                <Link to="/fleet" className="hover:underline">
-                  Xe
+                <Link to="/rental" className="hover:underline">
+                  Thuê xe
                 </Link>
               </nav>
               <div className="relative" ref={dropdownRef}>
