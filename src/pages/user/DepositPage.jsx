@@ -10,13 +10,13 @@ const ACCOUNT_NAME = "Tran Dinh Dung";
 export default function DepositPage() {
   const location = useLocation();
   const bookingInfo = location.state || {};
-  
+
   const [user, setUser] = useState(null);
   const [amount, setAmount] = useState(bookingInfo.amount || "");
   const [txCode, setTxCode] = useState("");
   const [status, setStatus] = useState("IDLE"); // IDLE | PENDING | SUCCESS
   const [transactions, setTransactions] = useState([]);
-  
+
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -100,106 +100,118 @@ export default function DepositPage() {
     &accountName=${ACCOUNT_NAME}`.replace(/\s/g, "");
 
   return (
-    <div className="max-w-xl mx-auto p-6 space-y-6">
-      <h1 className="text-2xl font-bold text-center">
-        {bookingInfo.carName ? "Thanh toán thuê xe" : "Nạp tiền ví"}
-      </h1>
+    <div className=" min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center px-4">
+      <div className="w-full max-w-xl bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 space-y-6">
+        {/* TITLE */}
+        <h1 className="text-2xl font-bold text-center text-gray-800 dark:text-gray-100">
+          {bookingInfo.carName ? "Thanh toán thuê xe" : "Nạp tiền vào ví"}
+        </h1>
 
-      {/* BOOKING INFO */}
-      {bookingInfo.carName && (
-        <div className="bg-blue-50 p-4 rounded-lg space-y-2">
-          <h2 className="font-semibold text-lg">Thông tin đặt xe</h2>
-          <p><strong>Xe:</strong> {bookingInfo.carName}</p>
-          <p><strong>Số ngày thuê:</strong> {bookingInfo.days} ngày</p>
-          <p><strong>Giá thuê:</strong> {bookingInfo.rentalFee?.toLocaleString()} VNĐ</p>
-          <p><strong>Phí dịch vụ:</strong> {bookingInfo.serviceFee?.toLocaleString()} VNĐ</p>
-          <p className="text-lg font-bold text-blue-600">
-            <strong>Tổng thanh toán:</strong> {bookingInfo.amount?.toLocaleString()} VNĐ
-          </p>
-        </div>
-      )}
+        {/* BOOKING INFO */}
+        {bookingInfo.carName && (
+          <div className="rounded-xl bg-blue-50 dark:bg-blue-900/30 p-4 space-y-2">
+            <h2 className="font-semibold text-lg text-blue-700 dark:text-blue-300">
+              Thông tin đặt xe
+            </h2>
 
-      {/* FORM */}
-      {status === "IDLE" && !bookingInfo.amount && (
-        <div className="space-y-4">
-          <input
-            placeholder="User ID"
-            className="border p-2 w-full"
-            value={userId}
-            readOnly
-          />
-          <input
-            type="number"
-            placeholder="Số tiền"
-            className="border p-2 w-full"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-          />
-          <button
-            onClick={handleCreate}
-            className="bg-blue-600 text-white w-full py-2 rounded"
-          >
-            Tạo QR thanh toán
-          </button>
-        </div>
-      )}
+            <div className="text-sm text-gray-700 dark:text-gray-200 space-y-1">
+              <p>
+                <span className="font-medium">Xe:</span> {bookingInfo.carName}
+              </p>
+              <p>
+                <span className="font-medium">Số ngày thuê:</span>{" "}
+                {bookingInfo.days} ngày
+              </p>
+              <p>
+                <span className="font-medium">Giá thuê:</span>{" "}
+                {bookingInfo.rentalFee?.toLocaleString()} VNĐ
+              </p>
+              <p>
+                <span className="font-medium">Phí dịch vụ:</span>{" "}
+                {bookingInfo.serviceFee?.toLocaleString()} VNĐ
+              </p>
+            </div>
 
-      {/* QR */}
-      {status === "PENDING" && (
-        <div className="text-center space-y-3">
-          <p className="font-medium">Quét QR để chuyển khoản</p>
-          <img src={qrUrl} alt="QR" className="mx-auto w-64" />
-          <p className="text-sm">
-            Nội dung: <b className="text-blue-600">{txCode}</b>
-          </p>
-          <p className="text-yellow-600 animate-pulse">
-            ⏳ Đang chờ hệ thống xác nhận...
-          </p>
-        </div>
-      )}
+            <div className="pt-2 border-t border-blue-200 dark:border-blue-700">
+              <p className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                Tổng thanh toán: {bookingInfo.amount?.toLocaleString()} VNĐ
+              </p>
+            </div>
+          </div>
+        )}
 
-      {/* SUCCESS */}
-      {status === "SUCCESS" && (
-        <div className="bg-green-100 p-4 rounded text-center">
-          <h2 className="text-green-700 font-bold text-lg">
-            ✅ Nạp tiền thành công
-          </h2>
-          <button
-            className="mt-3 underline text-blue-600"
-            onClick={() => {
-              setStatus("IDLE");
-              setAmount("");
-              setTxCode("");
-            }}
-          >
-            Nạp thêm
-          </button>
-        </div>
-      )}
+        {/* FORM */}
+        {status === "IDLE" && !bookingInfo.amount && (
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">
+                User ID
+              </label>
+              <input
+                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-3 py-2"
+                value={userId}
+                readOnly
+              />
+            </div>
 
-      {/* HISTORY */}
-      <div>
-        <h2 className="font-semibold mb-2">Lịch sử giao dịch</h2>
-        <table className="w-full border text-sm">
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="border p-1">Mã</th>
-              <th className="border p-1">Tiền</th>
-              <th className="border p-1">Trạng thái</th>
-            </tr>
-          </thead>
-          <tbody>
-            {transactions.map((t) => (
-              <tr key={t.id} className="text-center">
-                <td className="border">{t.sepayOrderId}</td>
-                <td className="border">{t.amount.toLocaleString()}đ</td>
-                <td className="border">
-                  {t.status === "PENDING" ? "⏳ Chờ" : "✅ Thành công"}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+            <div>
+              <label className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-1">
+                Số tiền (VNĐ)
+              </label>
+              <input
+                type="number"
+                className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+              />
+            </div>
+
+            <button
+              onClick={handleCreate}
+              className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold transition"
+            >
+              Tạo QR thanh toán
+            </button>
+          </div>
+        )}
+
+        {/* QR */}
+        {status === "PENDING" && (
+          <div className="text-center space-y-4">
+            <p className="font-medium text-gray-700 dark:text-gray-200">
+              Quét QR để chuyển khoản
+            </p>
+
+            <div className="bg-gray-100 dark:bg-gray-700 p-4 rounded-xl inline-block">
+              <img src={qrUrl} alt="QR" className="w-64 h-64 mx-auto" />
+            </div>
+
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              Nội dung chuyển khoản
+            </p>
+            <p className="font-mono text-blue-600 dark:text-blue-400 break-all">
+              {txCode}
+            </p>
+
+            <div className="flex items-center justify-center gap-2 text-yellow-600 dark:text-yellow-400 animate-pulse">
+              <span className="text-lg">⏳</span>
+              <span>Đang chờ hệ thống xác nhận...</span>
+            </div>
+          </div>
+        )}
+
+        {/* SUCCESS */}
+        {status === "SUCCESS" && (
+          <div className="bg-green-50 dark:bg-green-900/30 p-5 rounded-xl text-center space-y-3">
+            <h2 className="text-green-700 dark:text-green-400 font-bold text-lg">
+              Thanh toán thành công
+            </h2>
+
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              Giao dịch đã được ghi nhận vào hệ thống
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

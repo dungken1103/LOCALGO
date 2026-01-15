@@ -1,47 +1,69 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import useTheme from '../../hooks/useTheme';
-import Header from '../../components/Header';
-import Hero from '../../components/Hero';
-import Features from '../../components/Features';
-import Footer from '../../components/Footer';
-import { useEffect } from 'react';
+import React from "react";
+import { Link } from "react-router-dom";
+import useTheme from "../../hooks/useTheme";
+import Header from "../../components/Header";
+import Hero from "../../components/Hero";
+import Features from "../../components/Features";
+import Footer from "../../components/Footer";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Sidebar from "../../components/rental/Sidebar";
+import MainContent from "../../components/rental/MainContent";
+import { useState } from "react";
+import { useCar } from "../../hooks/useCar";
 
 const Home = () => {
   const { theme, toggleTheme } = useTheme();
-  useEffect(() => {
-  const html = document.documentElement;
-  html.classList.remove('dark');
-  if (theme === 'dark') html.classList.add('dark');
-}, [theme]);
+  const navigate = useNavigate();
 
-  const cars = [
-    { id: 1, name: 'Toyota Camry', price: 100, image: '/images/camry.jpg', location: 'Hanoi' },
-    { id: 2, name: 'Honda Civic', price: 80, image: '/images/civic.jpg', location: 'Ho Chi Minh City' },
-    { id: 3, name: 'Mazda 3', price: 90, image: '/images/mazda3.jpg', location: 'Da Nang' },
-  ];
+  useEffect(() => {
+    const html = document.documentElement;
+    html.classList.remove("dark");
+    if (theme === "dark") html.classList.add("dark");
+  }, [theme]);
+
+  const [filters, setFilters] = useState({
+    priceRange: [0, 1000000],
+    brands: [],
+    seats: [],
+    transmissions: [],
+  });
+
+  const { data: cars, isLoading, isError, error } = useCar();
+  // console.log('Fetched cars:', cars);
+  // Normalize API response to an array for MainContent
+  const carsList = Array.isArray(cars) ? cars : cars?.data ?? cars?.cars ?? [];
+
+  const handleCardClick = (slug) => navigate(`/car/${slug}`);
+  const handleRentNow = (slug) => navigate(`/car/${slug}`);
 
   return (
-    <div className="app-root" >
+    <div className="app-root">
       <Header theme={theme} toggleTheme={toggleTheme} />
       <Hero theme={theme} />
       <Features />
       <main className="container mx-auto py-12 px-4">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Xe nổi bật</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {cars.map((car) => (
-            <div key={car.id} className="border rounded-lg p-4 shadow-lg bg-white dark:bg-gray-800 hover:shadow-xl transition-shadow">
-              <img src={car.image} alt={car.name} className="w-full h-48 object-cover rounded" />
-              <div className="mt-4">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{car.name}</h2>
-                <p className="text-lg text-gray-600 dark:text-gray-400">${car.price}/day</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">Địa điểm: {car.location}</p>
-                <Link to={`/car/${car.id}`} className="block mt-4 text-center bg-blue-500 dark:bg-blue-600 text-white py-2 rounded hover:bg-blue-600 dark:hover:bg-blue-700 transition">
-                  Xem chi tiết
-                </Link>
-              </div>
-            </div>
-          ))}
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+          Xe nổi bật
+        </h2>
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex gap-6">
+            <main className="flex-1">
+              {isLoading && <div>Đang tải danh sách xe...</div>}
+              {isError && (
+                <div className="text-red-500">
+                  Lỗi: {error?.message || "Không thể tải dữ liệu"}
+                </div>
+              )}
+              {!isLoading && !isError && (
+                <MainContent
+                  cars={carsList}
+                  onRentNow={handleRentNow}
+                  onCardClick={handleCardClick}
+                />
+              )}
+            </main>
+          </div>
         </div>
       </main>
       <Footer />

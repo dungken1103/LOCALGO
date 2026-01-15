@@ -34,7 +34,7 @@ const CarRentalPage = () => {
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
       <div className="container mx-auto px-4 py-6">
         <div className="flex gap-6">
-          <aside className="w-64">
+          <aside className="w-64 mx-5">
             <Sidebar filters={filters} setFilters={setFilters} />
           </aside>
           <main className="flex-1">
