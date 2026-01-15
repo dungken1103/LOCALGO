@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "../../services/axiosConfig";
 import { v4 as uuidv4 } from "uuid";
 
@@ -7,11 +8,15 @@ const ACCOUNT_NO = "43311032004";
 const ACCOUNT_NAME = "Tran Dinh Dung";
 
 export default function DepositPage() {
+  const location = useLocation();
+  const bookingInfo = location.state || {};
+  
   const [user, setUser] = useState(null);
-  const [amount, setAmount] = useState("");
+  const [amount, setAmount] = useState(bookingInfo.amount || "");
   const [txCode, setTxCode] = useState("");
   const [status, setStatus] = useState("IDLE"); // IDLE | PENDING | SUCCESS
   const [transactions, setTransactions] = useState([]);
+  
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -24,6 +29,15 @@ export default function DepositPage() {
     }
   }, []);
   const userId = user ? user.id : null;
+
+  /* =========================
+     TỰ ĐỘNG TẠO QR KHI CÓ BOOKING INFO
+  ========================== */
+  useEffect(() => {
+    if (userId && bookingInfo.amount && status === "IDLE") {
+      handleCreate();
+    }
+  }, [userId, bookingInfo.amount]);
 
   /* =========================
      POLLING KHI PENDING
@@ -87,10 +101,26 @@ export default function DepositPage() {
 
   return (
     <div className="max-w-xl mx-auto p-6 space-y-6">
-      <h1 className="text-2xl font-bold text-center">Nạp tiền ví</h1>
+      <h1 className="text-2xl font-bold text-center">
+        {bookingInfo.carName ? "Thanh toán thuê xe" : "Nạp tiền ví"}
+      </h1>
+
+      {/* BOOKING INFO */}
+      {bookingInfo.carName && (
+        <div className="bg-blue-50 p-4 rounded-lg space-y-2">
+          <h2 className="font-semibold text-lg">Thông tin đặt xe</h2>
+          <p><strong>Xe:</strong> {bookingInfo.carName}</p>
+          <p><strong>Số ngày thuê:</strong> {bookingInfo.days} ngày</p>
+          <p><strong>Giá thuê:</strong> {bookingInfo.rentalFee?.toLocaleString()} VNĐ</p>
+          <p><strong>Phí dịch vụ:</strong> {bookingInfo.serviceFee?.toLocaleString()} VNĐ</p>
+          <p className="text-lg font-bold text-blue-600">
+            <strong>Tổng thanh toán:</strong> {bookingInfo.amount?.toLocaleString()} VNĐ
+          </p>
+        </div>
+      )}
 
       {/* FORM */}
-      {status === "IDLE" && (
+      {status === "IDLE" && !bookingInfo.amount && (
         <div className="space-y-4">
           <input
             placeholder="User ID"
