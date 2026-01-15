@@ -26,4 +26,24 @@ export const carService = {
         }
     },
 
+    // Create Car
+    createCar: async (carData) => {
+        try{
+            const response = await apiClient.post("/cars", carData);
+            return response.data;   
+        }catch(error){
+            throw new Error("Failed to create car: " + (error.response?.data?.message || error.message));
+        }   
+    },
+
+    // Update Car
+    updateCar: async (slug, carData) => {
+        try{
+            const response = await apiClient.put(`/cars/${slug}`, carData);
+            return response.data;   
+        }catch(error){
+            throw new Error("Failed to update car: " + (error.response?.data?.message || error.message));
+        }   
+    },
+
 }
