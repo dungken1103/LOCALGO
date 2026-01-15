@@ -1,14 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useTheme from '../../hooks/useTheme';
-import { useCar, useCarDetails } from '../../hooks/useCar';
-import Header from '../../components/Header';
+import { useCarDetails } from '../../hooks/useCar';
 import Footer from '../../components/Footer';
+import ImageGallery from '../../components/rental/ImageGallery';
+import CarInfo from '../../components/rental/CarInfo';
+import Reviews from '../../components/rental/Reviews';
+import BookingCard from '../../components/rental/BookingCard';
+import BookingModal from '../../components/rental/BookingModal';
 
 const CarDetails = () => {
   const { id } = useParams();
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
   const { data: car, isLoading, error } = useCarDetails(id);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [pickupDate, setPickupDate] = useState('');
+  const [returnDate, setReturnDate] = useState('');
 
   if (isLoading) {
     return (
@@ -34,29 +42,57 @@ const CarDetails = () => {
     );
   }
 
+  const images = car.images || [car.image];
+  const specs = car.specs || { seats: '4', transmission: 'Tự động', fuel: 'Xăng', year: '2020' };
+  const rules = car.rules || ['Không hút thuốc', 'Không mang thú cưng', 'Trả xe đúng giờ'];
+  const reviews = car.reviews || [];
+  const owner = car.owner || { avatar: '/default-avatar.png', rating: 4.5, trips: 120, responseRate: '95%', responseTime: '1 giờ' };
+
+  const calculateTotal = () => {
+    const days = pickupDate && returnDate ? Math.max(1, Math.ceil((new Date(returnDate) - new Date(pickupDate)) / (1000 * 60 * 60 * 24))) : 1;
+    const rentalFee = days * (car.pricePerDay || 0);
+    const serviceFee = rentalFee * 0.1; // 10% phí dịch vụ
+    return { days, rentalFee, serviceFee, total: rentalFee + serviceFee };
+  };
+
+  const { days, rentalFee, serviceFee, total } = calculateTotal();
+
   return (
     <div className={`app-root ${theme} bg-gray-50 dark:bg-gray-900 min-h-screen`}>
-      <main className="container mx-auto py-12 px-4 max-w-4xl">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
-          <img src={car.image} alt={car.name} className="w-full h-64 object-cover" />
-          <div className="p-6">
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100">{car.name}</h1>
-            <p className="text-xl text-gray-600 dark:text-gray-400 mt-2">{car.pricePerDay?.toLocaleString()} VNĐ/ngày</p>
-            <p className="text-sm text-gray-500 dark:text-gray-400">Địa điểm: {car.location}</p>
-            <p className="mt-4 text-gray-800 dark:text-gray-200">{car.description}</p>
-            {car.features && (
-              <ul className="mt-4 space-y-2">
-                {car.features.map((feature, index) => (
-                  <li key={index} className="text-gray-700 dark:text-gray-300">- {feature}</li>
-                ))}
-              </ul>
-            )}
-            <button className="mt-6 w-full bg-blue-500 dark:bg-blue-600 text-white py-3 rounded-lg text-lg font-semibold hover:bg-blue-600 dark:hover:bg-blue-700 transition">
-              Đặt xe ngay
-            </button>
-          </div>
+      <main className="container mx-auto py-12 px-4 max-w-6xl flex gap-8">
+        {/* Phần hình ảnh và thông tin xe */}
+        <div className="flex-1">
+          <ImageGallery
+            images={images}
+            currentImageIndex={currentImageIndex}
+            setCurrentImageIndex={setCurrentImageIndex}
+          />
+          <CarInfo car={car} specs={specs} rules={rules} />
+          <Reviews reviews={reviews} />
         </div>
+
+        {/* Card đặt xe */}
+        <BookingCard
+          car={car}
+          owner={owner}
+          pickupDate={pickupDate}
+          setPickupDate={setPickupDate}
+          returnDate={returnDate}
+          setReturnDate={setReturnDate}
+          onRentNow={() => setShowModal(true)}
+        />
       </main>
+
+      <BookingModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        car={car}
+        days={days}
+        rentalFee={rentalFee}
+        serviceFee={serviceFee}
+        total={total}
+      />
+
       <Footer />
     </div>
   );
