@@ -1,6 +1,22 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const BookingModal = ({ showModal, setShowModal, car, days, rentalFee, serviceFee, total }) => {
+  const navigate = useNavigate();
+
+  const handleConfirm = () => {
+    const bookingInfo = {
+      carName: car.name,
+      days,
+      rentalFee,
+      serviceFee,
+      amount: total,
+      carId: car.id,
+    };
+    navigate('/deposit', { state: bookingInfo });
+    setShowModal(false);
+  };
+
   if (!showModal) return null;
 
   return (
@@ -20,7 +36,10 @@ const BookingModal = ({ showModal, setShowModal, car, days, rentalFee, serviceFe
           >
             Hủy
           </button>
-          <button className="flex-1 bg-blue-500 dark:bg-blue-600 text-white py-2 rounded hover:bg-blue-600 dark:hover:bg-blue-700">
+          <button
+            onClick={handleConfirm}
+            className="flex-1 bg-blue-500 dark:bg-blue-600 text-white py-2 rounded hover:bg-blue-600 dark:hover:bg-blue-700"
+          >
             Xác nhận
           </button>
         </div>
