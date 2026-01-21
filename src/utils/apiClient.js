@@ -7,7 +7,16 @@ const baseURL = import.meta.env.VITE_API_URL || '';
 const client = axios.create({
   baseURL,
   timeout: 30000,
-  withCredentials: true, 
+  withCredentials: false, 
+});
+client.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+
+  if (token) {
+    config.headers.Authorization = `${token}`;
+  }
+
+  return config;
 });
 
 export const apiClient = {

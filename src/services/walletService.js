@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE = 'https://tn7bs76m-3212.asse.devtunnels.ms';
+const API_BASE = import.meta.env.VITE_API_URL || '';
 
 export const getBalance = async (userId: string) => {
   const res = await axios.get(`${API_BASE}/wallet/balance/${userId}`);
