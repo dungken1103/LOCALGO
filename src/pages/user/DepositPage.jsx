@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import axios from "../../services/axiosConfig";
 import { v4 as uuidv4 } from "uuid";
+import { id } from "zod/v4/locales";
 
 const BANK_CODE = "TPB";
 const ACCOUNT_NO = "43311032004";
@@ -72,6 +73,7 @@ export default function DepositPage() {
         userId,
         amount: Number(amount),
         sepayOrderId: code,
+        bookingId: bookingInfo?.id ?? null,
       },
       { withCredentials: true }
     );
@@ -89,6 +91,7 @@ export default function DepositPage() {
 
     fetchTransactions();
   };
+  console.log(bookingInfo);
 
   /* =========================
      QR LINK

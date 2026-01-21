@@ -57,6 +57,7 @@ const Booking = () => {
 
   const handleConfirm = () => {
     const bookingInfo = {
+      id: booking.data.id,
       carName: car.name,
       days: rentalDays,
       rentalFee,
