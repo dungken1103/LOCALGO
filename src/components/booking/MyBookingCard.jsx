@@ -102,7 +102,7 @@ export default function MyBookingCard({ booking }) {
 
     navigate("/deposit", {
       state: {
-        bookingId: booking.id,
+        id: booking.id,
         slug: booking.slug,
         carId: booking.car.id,
         carName: booking.car.name,
