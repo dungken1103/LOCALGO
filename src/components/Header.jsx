@@ -136,7 +136,7 @@ export default function Header({ theme, toggleTheme }) {
                     {user?.role === "RENTER" ? (
                       <>
                         <Link
-                          to="/bookings"
+                          to="/my-bookings"
                           className="block px-4 py-2 text-sm"
                         >
                           Đơn thuê xe

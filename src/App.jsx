@@ -26,6 +26,7 @@ import CarFormPage from "./pages/user/owner/CarFormPage";
 import CarRentalPage from "./pages/CarRentalPage.jsx";
 import UserLayout from "./layouts/UserLayout";
 import BookingPage from "./pages/user/Booking.jsx";
+import MyBookings from "./pages/user/MyBookings.jsx";
 function App() {
   // initialize theme hook (keeps in localStorage and on <html> class)
   const { theme, toggleTheme } = useTheme();
@@ -49,6 +50,7 @@ function App() {
       <Route path="/car/:id" element={<UserLayout><CarDetails /></UserLayout>} />
       <Route path="/bookings" element={<UserLayout><Booking /></UserLayout>} />
       <Route path="/bookings/:slug" element={<BookingPage />} />
+      <Route path="/my-bookings" element={<UserLayout><MyBookings /></UserLayout>} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/login-success" element={<GoogleLoginSuccess />} />

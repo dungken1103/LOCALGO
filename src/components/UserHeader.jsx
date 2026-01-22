@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import ThemeToggle from "./ThemeToggle";
 import { Link, useNavigate, NavLink } from "react-router-dom";
 import axios from "../services/axiosConfig";
-import { FaSignOutAlt } from "react-icons/fa";
+import { FaSignOutAlt, FaCalendarAlt } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";
 import useTheme from "../hooks/useTheme";
 
@@ -98,6 +98,13 @@ export default function UserHeader({ theme, toggleTheme }) {
                 <Link to="/rental" className="hover:underline">
                   Thuê xe
                 </Link>
+                <Link 
+                  to="/my-bookings" 
+                  className="flex items-center gap-2 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                >
+                  <FaCalendarAlt />
+                  Xe của tôi
+                </Link>
               </nav>
               <div className="relative" ref={dropdownRef}>
                 <button
@@ -117,7 +124,7 @@ export default function UserHeader({ theme, toggleTheme }) {
                     {user?.role === "RENTER" ? (
                       <>
                         <Link
-                          to="/bookings"
+                          to="/my-bookings"
                           className="block px-4 py-2 text-sm"
                         >
                           Đơn thuê xe
