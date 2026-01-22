@@ -160,7 +160,19 @@ export default function Header({ theme, toggleTheme }) {
                           to="/bookings"
                           className="block px-4 py-2 text-sm"
                         >
-                          Đơn thuê xe
+                          Đơn cho thuê xe
+                        </Link>
+                        <Link
+                          to="/owner/cars/new"
+                          className="block px-4 py-2 text-sm"
+                        >
+                          Thêm xe
+                        </Link>
+                        <Link
+                          to="/my-bookings"
+                          className="block px-4 py-2 text-sm"
+                        >
+                          Đơn đã thuê
                         </Link>
                       </>
                     ) : null}
