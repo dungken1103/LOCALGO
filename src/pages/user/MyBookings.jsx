@@ -15,6 +15,7 @@ export default function MyBookings() {
       upcoming: 'PENDING_CONFIRMATION',
       completed: 'COMPLETED',
       cancelled: 'CANCELLED', // API uses 'CANCELED' (single 'l')
+      pending_payment: 'PENDING_PAYMENT',
     };
     return statusMap[tab];
   };
@@ -28,6 +29,7 @@ export default function MyBookings() {
     { id: 'upcoming', label: 'Sắp diễn ra' },
     { id: 'completed', label: 'Hoàn thành' },
     { id: 'cancelled', label: 'Đã hủy' },
+    { id: 'pending_payment', label: 'Chờ thanh toán' },
   ];
 
   // Get bookings from data
@@ -47,6 +49,7 @@ export default function MyBookings() {
       upcoming: 'PENDING_CONFIRMATION',
       completed: 'COMPLETED',
       cancelled: 'CANCELLED',
+      pending_payment: 'PENDING_PAYMENT',
     };
     
     return allBookings.filter(booking => booking.status === statusMap[tabId]).length;
