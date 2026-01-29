@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FaCar, FaClipboardList } from 'react-icons/fa';
-import axios from '../../services/axiosConfig';
+import axios from '../../../services/axiosConfig';
 
 /* ===================== CONSTANTS ===================== */
 
@@ -19,7 +19,7 @@ export default function OwnerDashboardPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-  api.get('/booking/owner')
+  axios.get('/booking/owner')
     .then((res) => {
       if (res.data.success) {
         setBookings(res.data.data);
