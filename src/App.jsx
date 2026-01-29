@@ -27,6 +27,7 @@ import CarRentalPage from "./pages/CarRentalPage.jsx";
 import UserLayout from "./layouts/UserLayout";
 import BookingPage from "./pages/user/Booking.jsx";
 import MyBookings from "./pages/user/MyBookings.jsx";
+import ApplyOwner from "./pages/user/ApplyOwner.jsx";
 function App() {
   // initialize theme hook (keeps in localStorage and on <html> class)
   const { theme, toggleTheme } = useTheme();
@@ -59,6 +60,7 @@ function App() {
       <Route path="/owner/cars/edit/:id" element={<CarFormPage isUpdate={true} />} />
       <Route path="/rental" element={<UserLayout><CarRentalPage /></UserLayout>} />
       <Route path="/*" element={<NotFoundPage />} />
+      <Route path="/apply-owner" element={<UserLayout><ApplyOwner /></UserLayout>} />
     </Routes>
   );
 }

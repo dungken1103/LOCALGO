@@ -1,11 +1,11 @@
 import { apiClient } from './apiClient';
-import { API_ENDPOINTS } from '../config/api';
+// import { API_ENDPOINTS } from '../config/api';
 
 export const authService = {
   async login(credentials) {
     try {
       const response = await apiClient.post(
-        API_ENDPOINTS.AUTH.LOGIN,
+       /auth/login
         credentials
       );
 
