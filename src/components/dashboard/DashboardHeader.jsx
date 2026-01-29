@@ -1,26 +1,30 @@
-import React, { useEffect, useState, useRef } from "react";
 import ThemeToggle from "../ThemeToggle";
-import { Link, useNavigate, NavLink } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "../../services/axiosConfig";
-import { FaSignOutAlt } from "react-icons/fa";
+import { FaSignOutAlt, FaCalendarAlt } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";
+import { useState, useEffect, useRef } from "react";
 import useTheme from "../../hooks/useTheme";
 
 export default function DashboardHeader({ theme, toggleTheme }) {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const dropdownRef = useRef(null);
+
   useEffect(() => {
+    setIsLoading(true);
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       try {
         const parsedUser = JSON.parse(storedUser);
         setUser(parsedUser);
       } catch (e) {
-        console.error("Error parsing user from localStorage:", e);
+        console.error(e);
       }
     }
+    setIsLoading(false);
   }, []);
   const handleLogout = async () => {
     try {
@@ -51,93 +55,110 @@ export default function DashboardHeader({ theme, toggleTheme }) {
   }, []);
   return (
     <header
-      className={`border-b border-slate-200/10 dark:border-white/5 sticky top-0 z-40 ${
+      className={`sticky top-0 z-40 border-b border-slate-200/10 dark:border-white/5 ${
         theme === "dark" ? "bg-gray-900" : "bg-white"
       }`}
     >
-        {/* <div className="flex items-center justify-between mb-6"></div> */}
-      <div className="container mx-auto flex items-center justify-between gap-4 py-4 px-4">
-        <div className="flex items-center gap-4">
-        </div>
+      <div className="w-full flex items-center justify-between px-6 py-4">
+        {/* LEFT - Logo */}
+        <Link to="/" className="flex items-center gap-3">
+          <div
+            className={`w-10 h-10 rounded-md flex items-center justify-center font-bold ${
+              theme === "dark"
+                ? "bg-gradient-to-r from-gray-700 to-gray-900 text-blue-200"
+                : "bg-gradient-to-r from-blue-500 to-indigo-600 text-gray-50"
+            }`}
+          >
+            LG
+          </div>
 
+          <div className="hidden sm:block">
+            <div
+              className={`text-lg font-bold ${
+                theme === "dark" ? "text-white" : "text-gray-900"
+              }`}
+            >
+              LocalGo
+            </div>
+            <div
+              className={`text-xs ${
+                theme === "dark" ? "text-gray-400" : "text-gray-500"
+              }`}
+            >
+              Thuê xe ô tô nhanh chóng
+            </div>
+          </div>
+        </Link>
+
+        {/* RIGHT - Auth + Theme */}
         <div className="flex items-center gap-3">
-          {user ? (
-            <>
-              <div className="relative" ref={dropdownRef}>
-                <button
-                  onClick={() => setOpen(!open)}
-                  className="hidden md:flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-gray-800 px-3 py-1 rounded-full shadow-sm hover:bg-slate-200 dark:hover:bg-gray-700 transition-colors duration-200"
-                >
-                  Xin chào, {user?.name || user?.email}
-                  <FiChevronDown
-                    className={`ml-1 transition-transform duration-200 ${
-                      open ? "rotate-180" : "rotate-0"
-                    }`}
-                  />
-                </button>
+          <>
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setOpen(!open)}
+                className="hidden md:flex items-center gap-2 text-sm font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-gray-800 px-3 py-1 rounded-full shadow-sm hover:bg-slate-200 dark:hover:bg-gray-700 transition-colors duration-200"
+              >
+                Xin chào, {user?.name || user?.email}
+                <FiChevronDown
+                  className={`ml-1 transition-transform duration-200 ${
+                    open ? "rotate-180" : "rotate-0"
+                  }`}
+                />
+              </button>
 
-                {open && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-slate-200 dark:border-gray-700 z-50 overflow-hidden">
-                    {user?.role === "RENTER" ? (
-                      <>
-                        <Link
-                          to="/bookings"
-                          className="block px-4 py-2 text-sm"
-                        >
-                          Đơn thuê xe
-                        </Link>
-                        <Link
-                          to="/apply-owner"
-                          className="block px-4 py-2 text-sm"
-                        >
-                          Đăng ký làm người cho thuê
-                        </Link>
-                      </>
-                    ) : user?.role === "OWNER" ? (
-                      <>
-                        <Link
-                          to="/owner/dashboard"
-                          className="block px-4 py-2 text-sm"
-                        >
-                          Bảng điều khiển chủ xe
-                        </Link>
-                        <Link
-                          to="/bookings"
-                          className="block px-4 py-2 text-sm"
-                        >
-                          Đơn thuê xe
-                        </Link>
-                      </>
-                    ) : null}
-                    <button
-                      onClick={handleLogout}
-                      className="w-full flex items-center justify-center space-x-2 bg-red-600 hover:bg-red-700 text-white py-2 px-4 transition-colors duration-200"
-                    >
-                      <FaSignOutAlt />
-                      <span>Đăng xuất</span>
-                    </button>
-                  </div>
-                )}
-              </div>
-            </>
-          ) : (
-            <>
-              <div className=" sm:flex gap-2 items-center">
-                <Link
-                  to="/login"
-                  className="text-sm rounded-md text-gray-700 dark:text-gray-200 hover:underline px-5"
-                >
-                  Đăng nhập
-                </Link>
-                <Link
-                  to="/register"
-                  className="text-sm rounded-md bg-blue-500 hover:bg-blue-600 text-white px-5 py-1 "
-                >
-                  Đăng ký
-                </Link>
-              </div>
-            </>
-          )}
+              {open && (
+                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-slate-200 dark:border-gray-700 z-50 overflow-hidden">
+                  {user?.role === "RENTER" ? (
+                    <>
+                      <Link
+                        to="/my-bookings"
+                        className="block px-4 py-2 text-sm"
+                      >
+                        Đơn thuê xe
+                      </Link>
+                      <Link
+                        to="/apply-owner"
+                        className="block px-4 py-2 text-sm"
+                      >
+                        Đăng ký làm người cho thuê
+                      </Link>
+                    </>
+                  ) : user?.role === "OWNER" ? (
+                    <>
+                      <Link
+                        to="/owner/dashboard"
+                        className="block px-4 py-2 text-sm"
+                      >
+                        Bảng điều khiển chủ xe
+                      </Link>
+                      <Link to="/bookings" className="block px-4 py-2 text-sm">
+                        Đơn thuê xe
+                      </Link>
+                      <Link
+                        to="/owner/cars/new"
+                        className="block px-4 py-2 text-sm"
+                      >
+                        Thêm xe mới
+                      </Link>
+                      <Link
+                        to="/my-bookings"
+                        className="block px-4 py-2 text-sm"
+                      >
+                        Đơn đã thuê
+                      </Link>
+                    </>
+                  ) : null}
+                  <button
+                    onClick={handleLogout}
+                    className="w-full flex items-center justify-center space-x-2 bg-red-600 hover:bg-red-700 text-white py-2 px-4 transition-colors duration-200"
+                  >
+                    <FaSignOutAlt />
+                    <span>Đăng xuất</span>
+                  </button>
+                </div>
+              )}
+            </div>
+          </>
 
           <ThemeToggle theme={theme} toggleTheme={toggleTheme} />
         </div>

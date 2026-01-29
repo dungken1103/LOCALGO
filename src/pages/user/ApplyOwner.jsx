@@ -65,10 +65,6 @@ const ApplyOwner = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.avatar) {
-      newErrors.avatar = 'Vui lòng tải lên ảnh đại diện';
-    }
-
     if (!formData.fullName.trim()) {
       newErrors.fullName = 'Vui lòng nhập họ và tên';
     } else if (formData.fullName.trim().length < 3) {
@@ -255,47 +251,7 @@ const ApplyOwner = () => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8">
-          {/* Avatar Upload */}
-          <div className="mb-6">
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-              Ảnh Đại Diện <span className="text-red-500">*</span>
-            </label>
-            
-            <div className="flex flex-col items-center">
-              {previewImage ? (
-                <div className="relative">
-                  <img
-                    src={previewImage}
-                    alt="Preview"
-                    className="w-full h-40 object-cover border-4 border-blue-500 shadow-lg"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleRemoveImage}
-                    className="absolute -top-2 -right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors shadow-lg"
-                  >
-                    <FaTimes />
-                  </button>
-                </div>
-              ) : (
-                <label className="w-full h-40 flex flex-col items-center justify-center border-gray-300 dark:border-gray-600 cursor-pointer hover:border-blue-500 dark:hover:border-blue-400 transition-colors bg-gray-50 dark:bg-gray-700">
-                  <FaCamera className="text-4xl text-gray-400 dark:text-gray-500 mb-2" />
-                  <span className="text-sm text-gray-500 dark:text-gray-400">Tải ảnh lên</span>
-                  <span className="text-xs text-gray-400 dark:text-gray-500 mt-1">Max 5MB</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="hidden"
-                  />
-                </label>
-              )}
-            </div>
-            
-            {errors.avatar && (
-              <p className="text-red-500 text-sm mt-2 text-center">{errors.avatar}</p>
-            )}
-          </div>
+          
 
           {/* Full Name */}
           <div className="mb-6">

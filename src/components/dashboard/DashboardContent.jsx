@@ -11,7 +11,7 @@ export default function DashboardContent() {
   ];
 
   return (
-    <main className="p-6 flex-1 ml-64 bg-gray-50 dark:bg-gray-900 min-h-screen">
+    <main className="p-6 flex-1 bg-gray-50 dark:bg-gray-900 min-h-screen">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => (
           <DashboardCard key={stat.title} {...stat} />
