@@ -1,3 +1,5 @@
+import React from "react";
+import OwnerApplicationsTable from "../../components/admin/OwnerApplicationsTable";
 import React, { useEffect, useState } from "react";
 import { FaCar, FaUsers, FaClipboardList } from "react-icons/fa";
 import axios from "../../services/axiosConfig";
@@ -74,6 +76,7 @@ export default function AdminDashboard() {
       <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
         Admin Dashboard
       </h1>
+           <OwnerApplicationsTable />
 
       {/* ===================== STATS ===================== */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
