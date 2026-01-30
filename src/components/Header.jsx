@@ -114,7 +114,7 @@ export default function Header({ theme, toggleTheme }) {
           {user ? (
             <>
               <nav className="hidden md:flex gap-6 text-sm text-slate-600 dark:text-slate-300">
-                <Link to="/fleet" className="hover:underline">
+                <Link to="/rental" className="hover:underline">
                   Xe
                 </Link>
               </nav>

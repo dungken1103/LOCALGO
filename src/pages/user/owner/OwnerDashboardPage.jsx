@@ -22,7 +22,7 @@ export default function OwnerDashboardPage() {
     <div className="flex">
       <DashboardSidebar />
       <div className="flex-1 flex flex-col min-h-screen">
-        <DashboardHeader theme={theme} toggleTheme={toggleTheme} />
+        {/* <DashboardHeader theme={theme} toggleTheme={toggleTheme} /> */}
         <DashboardContent />
       </div>
     </div>

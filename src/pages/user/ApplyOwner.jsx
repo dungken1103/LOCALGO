@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaUser, FaEnvelope, FaPhone, FaUniversity, FaCreditCard, FaCamera, FaTimes, FaCheckCircle } from 'react-icons/fa';
 import { useProfile } from '../../hooks/useProfile';
+import api from '../../services/axiosConfig';
 
 const ApplyOwner = () => {
   const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -65,9 +66,9 @@ const ApplyOwner = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    if (!formData.avatar) {
-      newErrors.avatar = 'Vui lòng tải lên ảnh đại diện';
-    }
+    // if (!formData.avatar) {
+    //   newErrors.avatar = 'Vui lòng tải lên ảnh đại diện';
+    // }
 
     if (!formData.fullName.trim()) {
       newErrors.fullName = 'Vui lòng nhập họ và tên';
@@ -162,10 +163,29 @@ const ApplyOwner = () => {
     }
 
     setIsSubmitting(true);
+    setErrors({});
 
-    // Simulate API call
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Backend only needs email, phone, and bankAccount
+      // fullName and bankName are taken from JWT token
+      const requestBody = {
+        email: formData.email,
+        phone: formData.phone,
+        bankAccount: formData.accountNumber,
+        avatar: 'abc.jpg' // Placeholder; actual file upload handling not implemented
+      };
+
+      console.log('Request body:', requestBody);
+
+      const response = await api({
+        method: 'post',
+        url: '/users/apply-owner',
+        data: requestBody,
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${localStorage.getItem('token')}`,
+        },
+      });
       
       // Success
       setIsSuccess(true);
@@ -185,6 +205,28 @@ const ApplyOwner = () => {
       }, 3000);
     } catch (error) {
       console.error('Error submitting form:', error);
+      console.error('Error response:', error.response?.data);
+      
+      // Extract error message from different possible formats
+      let errorMessage = 'Có lỗi xảy ra khi gửi đăng ký. Vui lòng thử lại!';
+      
+      if (error.response?.data) {
+        if (typeof error.response.data === 'string') {
+          errorMessage = error.response.data;
+        } else if (error.response.data.message) {
+          if (Array.isArray(error.response.data.message)) {
+            errorMessage = error.response.data.message.join(', ');
+          } else {
+            errorMessage = error.response.data.message;
+          }
+        } else if (error.response.data.error) {
+          errorMessage = error.response.data.error;
+        }
+      }
+      
+      setErrors({
+        submit: errorMessage
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -255,6 +297,13 @@ const ApplyOwner = () => {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8">
+          {/* Submit Error */}
+          {errors.submit && (
+            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+              <p className="text-red-600 dark:text-red-400 text-sm">{errors.submit}</p>
+            </div>
+          )}
+
           {/* Avatar Upload */}
           <div className="mb-6">
             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">

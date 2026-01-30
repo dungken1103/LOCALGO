@@ -1,11 +1,15 @@
 import React from "react";
+import OwnerApplicationsTable from "../../components/admin/OwnerApplicationsTable";
 
 export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-10 px-4">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Admin Dashboard</h1>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+        <OwnerApplicationsTable />
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 mt-8">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 border border-gray-200 dark:border-gray-700">
             <div className="text-2xl font-bold text-indigo-500 mb-2">120</div>
             <div className="text-gray-700 dark:text-gray-300">Tổng số xe</div>
