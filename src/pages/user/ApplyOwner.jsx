@@ -66,10 +66,13 @@ const ApplyOwner = () => {
   const validateForm = () => {
     const newErrors = {};
 
+<<<<<<< HEAD
     // if (!formData.avatar) {
     //   newErrors.avatar = 'Vui lòng tải lên ảnh đại diện';
     // }
 
+=======
+>>>>>>> b25d001e2ad992d030b7a76272da219f732c28e4
     if (!formData.fullName.trim()) {
       newErrors.fullName = 'Vui lòng nhập họ và tên';
     } else if (formData.fullName.trim().length < 3) {

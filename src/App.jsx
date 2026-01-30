@@ -14,17 +14,17 @@ import Login from "./pages/public/Login.jsx";
 import Register from "./pages/public/Register.jsx";
 import { ThemeProvider } from "./context/ThemeContext";
 import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
-import OwnerDashboard from "./pages/user/OwnerDashboard.jsx";
+import OwnerDashboardPage from "./pages/user/owner/OwnerDashboardPage";
 import ChatWithOwner from "./pages/user/ChatWithOwner.jsx";
 import RentalContract from "./pages/user/RentalContract.jsx";
 import DepositPage from "./pages/user/DepositPage.jsx";
 import WithdrawPage from "./pages/user/WithdrawPage.jsx";
 import NotFoundPage from "./pages/public/NotFoundPage.jsx";
 import GoogleLoginSuccess from "./components/GoogleLoginSuccess";
-import OwnerDashboardPage from "./pages/user/owner/OwnerDashboardPage";
 import CarFormPage from "./pages/user/owner/CarFormPage";
 import CarRentalPage from "./pages/CarRentalPage.jsx";
 import UserLayout from "./layouts/UserLayout";
+import DashboardLayout from "./layouts/DashboardLayout.jsx";
 import BookingPage from "./pages/user/Booking.jsx";
 import MyBookings from "./pages/user/MyBookings.jsx";
 import ApplyOwner from "./pages/user/ApplyOwner.jsx";
@@ -40,8 +40,8 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/admin" element={<UserLayout><AdminDashboard /></UserLayout>} />
-      <Route path="/owner" element={<UserLayout><OwnerDashboard /></UserLayout>} />
+      <Route path="/admin" element={<DashboardLayout><AdminDashboard /></DashboardLayout>} />
+      <Route path="/owner" element={<DashboardLayout><OwnerDashboardPage /></DashboardLayout>} />
       <Route path="/chat/:ownerId" element={<UserLayout><ChatWithOwner /></UserLayout>} />
       <Route path="/contract/:bookingId" element={<UserLayout><RentalContract /></UserLayout>} />
       <Route path="/deposit" element={<UserLayout><DepositPage /></UserLayout>} />
@@ -59,8 +59,13 @@ function App() {
       <Route path="/owner/cars/new" element={<UserLayout><CarFormPage /></UserLayout>} />
       <Route path="/owner/cars/edit/:id" element={<CarFormPage isUpdate={true} />} />
       <Route path="/rental" element={<UserLayout><CarRentalPage /></UserLayout>} />
-      <Route path="/*" element={<NotFoundPage />} />
       <Route path="/apply-owner" element={<UserLayout><ApplyOwner /></UserLayout>} />
+
+
+
+
+
+      <Route path="/*" element={<NotFoundPage />} />
     </Routes>
   );
 }

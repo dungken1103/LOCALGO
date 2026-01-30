@@ -150,6 +150,18 @@ export default function UserHeader({ theme, toggleTheme }) {
                         >
                           Đơn thuê xe
                         </Link>
+                        <Link
+                          to="/owner/cars/new"
+                          className="block px-4 py-2 text-sm"
+                        >
+                          Thêm xe mới
+                        </Link>
+                        <Link
+                          to="/my-bookings"
+                          className="block px-4 py-2 text-sm"
+                        >
+                          Đơn đã thuê
+                        </Link>
                       </>
                     ) : null}
                     <button
