@@ -1,4 +1,3 @@
-import React from "react";
 import OwnerApplicationsTable from "../../components/admin/OwnerApplicationsTable";
 import React, { useEffect, useState } from "react";
 import { FaCar, FaUsers, FaClipboardList } from "react-icons/fa";
