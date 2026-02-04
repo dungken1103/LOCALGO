@@ -68,4 +68,14 @@ export const carService = {
         }
     },
 
+    // Update Car Status
+    updateCarStatus: async (slug, status) => {
+        try{
+            const response = await apiClient.patch(`/cars/${slug}/status`, { status });
+            return response.data;   
+        }catch(error){
+            throw new Error("Failed to update car status: " + (error.response?.data?.message || error.message));
+        }
+    },
+
 }

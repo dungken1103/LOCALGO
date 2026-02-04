@@ -29,6 +29,7 @@ import BookingPage from "./pages/user/Booking.jsx";
 import MyBookings from "./pages/user/MyBookings.jsx";
 import ApplyOwner from "./pages/user/ApplyOwner.jsx";
 import CarListPage from "./pages/user/owner/CarListPage.jsx";
+import EditCarPage from "./pages/user/owner/EditCarPage.jsx";
 function App() {
   // initialize theme hook (keeps in localStorage and on <html> class)
   const { theme, toggleTheme } = useTheme();
@@ -61,10 +62,10 @@ function App() {
       <Route path="/owner/cars/edit/:id" element={<CarFormPage isUpdate={true} />} />
       <Route path="/rental" element={<UserLayout><CarRentalPage /></UserLayout>} />
       <Route path="/apply-owner" element={<UserLayout><ApplyOwner /></UserLayout>} />
-      <Route path="/owners/owner-bookings" element={<DashboardLayout><CarListPage /></DashboardLayout>} />
-
-
-
+      {/* <Route path="/owners/owner-bookings" element={<DashboardLayout><CarListPage /></DashboardLayout>} /> */}
+      <Route path="/owners/owner-cars" element={<DashboardLayout><CarListPage /></DashboardLayout>} />
+      <Route path="/owners/edit-car/:slug" element={<DashboardLayout><EditCarPage /></DashboardLayout>} />
+      <Route path="/owners/add-car" element={<DashboardLayout><CarFormPage /></DashboardLayout>} />
 
       <Route path="/*" element={<NotFoundPage />} />
     </Routes>

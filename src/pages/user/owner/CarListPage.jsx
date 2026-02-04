@@ -5,6 +5,7 @@ import Header from "../../../components/Header";
 import Footer from "../../../components/Footer";
 import { useOwnerCars } from "../../../hooks/useCar";
 import { Pen } from "lucide-react";
+import CarDropdownMenu from "../../../components/owner/CarDropdownMenu";
 
 export default function CarListPage() {
   const { theme, toggleTheme } = useTheme();
@@ -17,13 +18,11 @@ export default function CarListPage() {
   const {
     data: carsData,
     isLoading: loadingCars,
-    error: carsError,
   } = useOwnerCars();
 
   return (
-    <div className="app-root">
-      {/* <Header theme={theme} toggleTheme={toggleTheme} /> */}
-      <main className="container">
+    <>
+    <main className="">
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
           Danh sách xe
         </h2>
@@ -37,8 +36,13 @@ export default function CarListPage() {
             {carsData.map((car) => (
               <div
                 key={car.slug}
-                className="border rounded-lg p-4 shadow-lg bg-white dark:bg-gray-800 hover:shadow-xl transition-shadow"
+                className="border rounded-lg p-4 shadow-lg bg-white dark:bg-gray-800 hover:shadow-xl transition-shadow relative"
               >
+                {/* Three-dot menu in top right corner */}
+                <div className="absolute top-4 right-4 z-10">
+                  <CarDropdownMenu car={car} />
+                </div>
+
                 <img
                   src={car.image}
                   alt={car.name}
@@ -72,6 +76,6 @@ export default function CarListPage() {
         )}
       </main>
       <Footer />
-    </div>
+    </>
   );
 }

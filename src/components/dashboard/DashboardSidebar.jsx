@@ -9,8 +9,7 @@ export default function DashboardSidebar({user}) {
     { name: "Tổng quan", path: "/dashboard", icon: <FiHome /> },
     user?.role === "ADMIN" && { name: "Người dùng", path: "/dashboard/users", icon: <FiUsers /> },
     user?.role === "ADMIN" && { name: "Đơn hàng", path: "/dashboard/orders", icon: <FiShoppingCart /> },
-    user?.role === "OWNER" && { name: "Đơn thuê của tôi", path: "/owners/owner-bookings", icon: <FiShoppingCart /> },
-    user?.role === "OWNER" && {name: "Xe của tôi", path: "/owners/owner-cars", icon: <FiUsers />},
+    user?.role === "OWNER" && { name: "Xe của tôi", path: "/owners/owner-cars", icon: <FiShoppingCart /> },
     { name: "Cài đặt", path: "/dashboard/settings", icon: <FiSettings /> },
   ];
 
