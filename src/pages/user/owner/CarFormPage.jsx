@@ -58,7 +58,7 @@ export default function CarFormPage({ car, isUpdate = false }) {
       });
 
       alert(`${isUpdate ? "Updated" : "Created"} successfully!`);
-      navigate("/my-cars");
+      navigate("/owners/owner-cars");
     } catch (err) {
       console.error(err);
       setError(err.response?.data?.message || "Something went wrong");

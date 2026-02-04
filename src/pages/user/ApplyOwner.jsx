@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { FaUser, FaEnvelope, FaPhone, FaUniversity, FaCreditCard, FaCamera, FaTimes, FaCheckCircle } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { FaUser, FaEnvelope, FaPhone, FaUniversity, FaCreditCard, FaCheckCircle } from 'react-icons/fa';
 import { useProfile } from '../../hooks/useProfile';
 import api from '../../services/axiosConfig';
 
 const ApplyOwner = () => {
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const { data: profileData, isLoading: isLoadingProfile } = useProfile(user?.userId || user?.id);
 
   const [formData, setFormData] = useState({
-    avatar: null,
     fullName: '',
     email: '',
     phone: '',
@@ -17,7 +18,6 @@ const ApplyOwner = () => {
   });
 
   const [errors, setErrors] = useState({});
-  const [previewImage, setPreviewImage] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
@@ -25,18 +25,12 @@ const ApplyOwner = () => {
   useEffect(() => {
     if (profileData) {
       setFormData(prev => ({
-        avatar: prev.avatar,
         fullName: profileData.fullName || profileData.name || prev.fullName,
         email: profileData.email || prev.email,
         phone: profileData.phone || profileData.phoneNumber || prev.phone,
         bank: profileData.bank || profileData.bankName || prev.bank,
         accountNumber: profileData.accountNumber || profileData.bankAccountNumber || prev.accountNumber
       }));
-
-      // Set preview image if avatar exists
-      if (profileData.avatar || profileData.avatarUrl || profileData.image) {
-        setPreviewImage(profileData.avatar || profileData.avatarUrl || profileData.image);
-      }
     }
   }, [profileData]);
 
@@ -65,10 +59,6 @@ const ApplyOwner = () => {
 
   const validateForm = () => {
     const newErrors = {};
-
-    // if (!formData.avatar) {
-    //   newErrors.avatar = 'Vui lòng tải lên ảnh đại diện';
-    // }
 
     if (!formData.fullName.trim()) {
       newErrors.fullName = 'Vui lòng nhập họ và tên';
@@ -102,45 +92,6 @@ const ApplyOwner = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  // Handle image upload
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    
-    if (file) {
-      // Check file size (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        setErrors({ ...errors, avatar: 'Kích thước ảnh không được vượt quá 5MB' });
-        return;
-      }
-
-      // Check file type
-      if (!file.type.startsWith('image/')) {
-        setErrors({ ...errors, avatar: 'Vui lòng chọn file ảnh' });
-        return;
-      }
-
-      setFormData({ ...formData, avatar: file });
-      
-      // Create preview
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPreviewImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-
-      // Clear error
-      const newErrors = { ...errors };
-      delete newErrors.avatar;
-      setErrors(newErrors);
-    }
-  };
-
-  // Remove image
-  const handleRemoveImage = () => {
-    setFormData({ ...formData, avatar: null });
-    setPreviewImage(null);
-  };
-
   // Handle input change
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -166,13 +117,13 @@ const ApplyOwner = () => {
     setErrors({});
 
     try {
-      // Backend only needs email, phone, and bankAccount
-      // fullName and bankName are taken from JWT token
+      // Backend only needs email, phone, bankAccount, and bankName
+      // fullName is taken from JWT token
       const requestBody = {
         email: formData.email,
         phone: formData.phone,
         bankAccount: formData.accountNumber,
-        avatar: 'abc.jpg' // Placeholder; actual file upload handling not implemented
+        bankName: formData.bank
       };
 
       console.log('Request body:', requestBody);
@@ -190,18 +141,9 @@ const ApplyOwner = () => {
       // Success
       setIsSuccess(true);
       
-      // Reset form after showing success message
+      // Redirect to rental page after showing success message
       setTimeout(() => {
-        setFormData({
-          avatar: null,
-          fullName: '',
-          email: '',
-          phone: '',
-          bank: '',
-          accountNumber: ''
-        });
-        setPreviewImage(null);
-        setIsSuccess(false);
+        navigate('/rental');
       }, 3000);
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -303,48 +245,6 @@ const ApplyOwner = () => {
               <p className="text-red-600 dark:text-red-400 text-sm">{errors.submit}</p>
             </div>
           )}
-
-          {/* Avatar Upload */}
-          <div className="mb-6">
-            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">
-              Ảnh Đại Diện <span className="text-red-500">*</span>
-            </label>
-            
-            <div className="flex flex-col items-center">
-              {previewImage ? (
-                <div className="relative">
-                  <img
-                    src={previewImage}
-                    alt="Preview"
-                    className="w-full h-40 object-cover border-4 border-blue-500 shadow-lg"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleRemoveImage}
-                    className="absolute -top-2 -right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors shadow-lg"
-                  >
-                    <FaTimes />
-                  </button>
-                </div>
-              ) : (
-                <label className="w-full h-40 flex flex-col items-center justify-center border-gray-300 dark:border-gray-600 cursor-pointer hover:border-blue-500 dark:hover:border-blue-400 transition-colors bg-gray-50 dark:bg-gray-700">
-                  <FaCamera className="text-4xl text-gray-400 dark:text-gray-500 mb-2" />
-                  <span className="text-sm text-gray-500 dark:text-gray-400">Tải ảnh lên</span>
-                  <span className="text-xs text-gray-400 dark:text-gray-500 mt-1">Max 5MB</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="hidden"
-                  />
-                </label>
-              )}
-            </div>
-            
-            {errors.avatar && (
-              <p className="text-red-500 text-sm mt-2 text-center">{errors.avatar}</p>
-            )}
-          </div>
 
           {/* Full Name */}
           <div className="mb-6">

@@ -33,6 +33,14 @@ const bookingService = {
   // Extend booking
   extendBooking: (bookingId, data) =>
     apiClient.put(`/booking/${bookingId}/extend`, data).then(res => res.data),
+
+  // Get all bookings for owner
+  getOwnerBookings: () =>
+    apiClient.get('/booking/owner').then(res => res.data),
+
+  // Update booking status by owner
+  updateBookingStatusByOwner: (bookingId, status) =>
+    apiClient.patch(`/booking/${bookingId}/status`, { status }).then(res => res.data),
 };
 
 export default bookingService;

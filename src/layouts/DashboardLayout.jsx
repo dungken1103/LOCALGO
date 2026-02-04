@@ -2,9 +2,11 @@ import { useEffect } from "react";
 import useTheme from "../hooks/useTheme";
 import DashboardHeader from "../components/dashboard/DashboardHeader";
 import DashboardSidebar from "../components/dashboard/DashboardSidebar";
+import { useAuth } from "../context/AuthContext";
 
 const DashboardLayout = ({ children }) => {
   const { theme, toggleTheme } = useTheme();
+  const {user} = useAuth();
 
   useEffect(() => {
     const html = document.documentElement;
@@ -19,7 +21,7 @@ const DashboardLayout = ({ children }) => {
       {/* Body */}
       <div className="flex pt-16">
         {/* Sidebar */}
-        <DashboardSidebar />
+        <DashboardSidebar user={user} />
 
         {/* Main content */}
         <main className="flex-1 ml-64 p-6">{children}</main>

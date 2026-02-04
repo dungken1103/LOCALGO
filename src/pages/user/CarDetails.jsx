@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import useTheme from "../../hooks/useTheme";
-import { useCarDetails } from "../../hooks/useCar";
+import { useCarDetails, useCarAvailability } from "../../hooks/useCar";
 import Footer from "../../components/Footer";
 import ImageGallery from "../../components/rental/ImageGallery";
 import CarInfo from "../../components/rental/CarInfo";
@@ -20,6 +20,13 @@ const CarDetails = () => {
   const [pickupDate, setPickupDate] = useState("");
   const [returnDate, setReturnDate] = useState("");
   const navigate = useNavigate();
+
+  // Check availability khi có đủ thông tin ngày
+  const { data: availabilityData, isLoading: isCheckingAvailability } = useCarAvailability(
+    id,
+    pickupDate,
+    returnDate
+  );
 
   if (isLoading) {
     return (
@@ -94,6 +101,22 @@ const CarDetails = () => {
       return;
     }
 
+    // Kiểm tra availability từ API
+    if (availabilityData && !availabilityData.isAvailable) {
+      alert(availabilityData.message || "Xe không có sẵn trong khoảng thời gian này");
+      return;
+    }
+
+    // Kiểm tra status xe
+    if (car.status === 'RENTED') {
+      alert("Xe hiện đang được thuê. Vui lòng chọn xe khác hoặc thử lại sau.");
+      return;
+    }
+    if (car.status === 'UNAVAILABLE') {
+      alert("Xe hiện không khả dụng. Vui lòng chọn xe khác.");
+      return;
+    }
+
     try {
       const booking = await bookingService.create({
         carId: car.id,
@@ -140,6 +163,8 @@ const CarDetails = () => {
           returnDate={returnDate}
           setReturnDate={setReturnDate}
           onRentNow={handleRentNow}
+          availabilityData={availabilityData}
+          isCheckingAvailability={isCheckingAvailability}
         />
       </main>
 
