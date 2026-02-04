@@ -32,3 +32,32 @@ export const useCarDetails = (slug) => {
         staleTime: 5 * 60 * 1000, // 5 minutes
     });
 }
+
+export const useCarAvailability = (slug, startDate, endDate) => {
+    const isEnabled = !!slug && !!startDate && !!endDate && startDate.trim() !== '' && endDate.trim() !== '';
+    
+    console.log('useCarAvailability called with:', { slug, startDate, endDate, isEnabled });
+    
+    return useQuery({
+        queryKey: [...Carkey.all, 'availability', slug, startDate, endDate],
+        queryFn: async () => {
+            console.log('Query function executing with:', { slug, startDate, endDate });
+            const response = await carService.checkAvailability(slug, startDate, endDate);
+            return response;
+        },
+        enabled: isEnabled, // Chỉ chầy khi có đầy đủ thông tin và không rỗng
+        staleTime: 1 * 60 * 1000, // 1 minute
+        retry: false, // Không retry nếu lỗi
+    });
+}
+
+export const useOwnerCars = () => {
+    return useQuery({
+        queryKey: [...Carkey.all, 'owner-cars'],
+        queryFn: async () => {
+            const response = await carService.getOwnerCars();
+            return response;
+        },
+        staleTime: 5 * 60 * 1000, // 5 minutes
+    });
+}

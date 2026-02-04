@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaUser, FaEnvelope, FaPhone, FaUniversity, FaCreditCard, FaCheckCircle } from 'react-icons/fa';
 import { useProfile } from '../../hooks/useProfile';
 import api from '../../services/axiosConfig';
 
 const ApplyOwner = () => {
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('user') || '{}');
   const { data: profileData, isLoading: isLoadingProfile } = useProfile(user?.userId || user?.id);
 
@@ -115,12 +117,13 @@ const ApplyOwner = () => {
     setErrors({});
 
     try {
-      // Backend only needs email, phone, and bankAccount
-      // fullName and bankName are taken from JWT token
+      // Backend only needs email, phone, bankAccount, and bankName
+      // fullName is taken from JWT token
       const requestBody = {
         email: formData.email,
         phone: formData.phone,
-        bankAccount: formData.accountNumber
+        bankAccount: formData.accountNumber,
+        bankName: formData.bank
       };
 
       console.log('Request body:', requestBody);
@@ -138,16 +141,9 @@ const ApplyOwner = () => {
       // Success
       setIsSuccess(true);
       
-      // Reset form after showing success message
+      // Redirect to rental page after showing success message
       setTimeout(() => {
-        setFormData({
-          fullName: '',
-          email: '',
-          phone: '',
-          bank: '',
-          accountNumber: ''
-        });
-        setIsSuccess(false);
+        navigate('/rental');
       }, 3000);
     } catch (error) {
       console.error('Error submitting form:', error);

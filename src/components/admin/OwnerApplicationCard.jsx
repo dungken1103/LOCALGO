@@ -69,7 +69,7 @@ const OwnerApplicationCard = ({ application }) => {
     if (reason) {
       rejectApplication.mutate({
         applicationId: application.id,
-        reviewData: { reason },
+        reviewData: {},
       });
     }
   };

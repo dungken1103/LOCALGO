@@ -29,6 +29,22 @@ const CarCard = ({ car, onRentNow, onCardClick = () => {} }) => {
           className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
         />
 
+        {/* Status Badge */}
+        {car.status && (
+          <div className="absolute top-3 left-3">
+            <span className={`
+              px-3 py-1 rounded-full text-xs font-semibold
+              ${car.status === 'AVAILABLE' ? 'bg-green-500/90 text-white' : ''}
+              ${car.status === 'RENTED' ? 'bg-red-500/90 text-white' : ''}
+              ${car.status === 'UNAVAILABLE' ? 'bg-gray-500/90 text-white' : ''}
+            `}>
+              {car.status === 'AVAILABLE' ? 'Sẵn sàng' : ''}
+              {car.status === 'RENTED' ? 'Đang thuê' : ''}
+              {car.status === 'UNAVAILABLE' ? 'Không khả dụng' : ''}
+            </span>
+          </div>
+        )}
+
         {/* Favorite */}
         <button
           onClick={toggleFavorite}
@@ -92,13 +108,21 @@ const CarCard = ({ car, onRentNow, onCardClick = () => {} }) => {
           <button
             onClick={(e) => {
               e.stopPropagation();
+              if (car.status !== 'AVAILABLE') {
+                alert(car.status === 'RENTED' ? 'Xe đang được thuê' : 'Xe không khả dụng');
+                return;
+              }
               onRentNow?.(car.slug);
             }}
-            className="
+            disabled={car.status !== 'AVAILABLE'}
+            className={`
               px-4 py-2 rounded-xl text-white font-medium
-              bg-gradient-to-r from-blue-500 to-cyan-500
-              hover:opacity-90 transition
-            "
+              transition
+              ${car.status === 'AVAILABLE' 
+                ? 'bg-gradient-to-r from-blue-500 to-cyan-500 hover:opacity-90 cursor-pointer' 
+                : 'bg-gray-400 cursor-not-allowed opacity-60'
+              }
+            `}
           >
             Thuê ngay
           </button>
