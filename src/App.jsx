@@ -57,7 +57,7 @@ function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/login-success" element={<GoogleLoginSuccess />} />
-      <Route path="/owner/dashboard" element={<OwnerDashboardPage />} />
+      <Route path="/owner/dashboard" element={<UserLayout><OwnerDashboardPage /></UserLayout>} />
       <Route path="/owner/cars/new" element={<UserLayout><CarFormPage /></UserLayout>} />
       <Route path="/owner/cars/edit/:id" element={<CarFormPage isUpdate={true} />} />
       <Route path="/rental" element={<UserLayout><CarRentalPage /></UserLayout>} />
