@@ -1,4 +1,4 @@
-import { get } from "react-hook-form";
+
 import { apiClient } from "../utils/apiClient";
 
 
@@ -77,5 +77,13 @@ export const carService = {
             throw new Error("Failed to update car status: " + (error.response?.data?.message || error.message));
         }
     },
+    searchCars: async (query) => {
+        try{
+            const response = await apiClient.get("/cars/search", { params: { q: query } });
+            return response.data;   
+        }catch(error){
+            throw new Error("Failed to search cars: " + (error.response?.data?.message || error.message));
+        }
+    }
 
 }
