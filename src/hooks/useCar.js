@@ -61,3 +61,14 @@ export const useOwnerCars = () => {
         staleTime: 5 * 60 * 1000, // 5 minutes
     });
 }
+export const useSearchCars = (query, trigger = 0) => {
+    return useQuery({
+        queryKey: [...Carkey.all, 'search', query, trigger],
+        queryFn: async () => {
+            const response = await carService.searchCars(query);
+            return response;
+        },
+        enabled: !!query && query.trim() !== '', // Chỉ chạy khi có query không rỗng
+        staleTime: 5 * 60 * 1000, // 5 minutes
+    });
+}

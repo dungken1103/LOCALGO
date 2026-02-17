@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 
-const Sidebar = ({ filters, onFilterChange, onApplyFilters }) => {
+const Sidebar = ({
+  filters,
+  onFilterChange,
+  onApplyFilters,
+  searchQuery,
+  onSearchQueryChange,
+}) => {
   const [priceRange, setPriceRange] = useState([0, 1000000]);
 
   const handlePriceChange = (e) => {
@@ -28,6 +34,19 @@ const Sidebar = ({ filters, onFilterChange, onApplyFilters }) => {
       >
         Bộ lọc
       </h3>
+
+      <div className="mb-6">
+        <label className="text-sm font-medium text-gray-600 dark:text-gray-300">
+          Tìm kiếm xe
+        </label>
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => onSearchQueryChange(e.target.value)}
+          placeholder="Nhập tên xe, hãng xe..."
+          className="w-full mt-2 px-3 py-2 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm text-gray-700 dark:text-gray-200 outline-none focus:ring-2 focus:ring-blue-400"
+        />
+      </div>
 
       {/* Price */}
       <div className="mb-6">

@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/rental/Sidebar';
 import MainContent from '../components/rental/MainContent';
 import useTheme from '../hooks/useTheme';
-import UserHeader from '../components/UserHeader';
-import { useCar } from '../hooks/useCar';
+import { useCar, useSearchCars } from '../hooks/useCar';
 
 const CarRentalPage = () => {
   const [filters, setFilters] = useState({
@@ -13,6 +12,9 @@ const CarRentalPage = () => {
     seats: [],
     transmissions: []
   });
+  const [searchQuery, setSearchQuery] = useState('');
+  const [appliedSearchQuery, setAppliedSearchQuery] = useState('');
+  const [searchTrigger, setSearchTrigger] = useState(0);
   const { theme } = useTheme();
   const navigate = useNavigate();
 
@@ -23,24 +25,46 @@ const CarRentalPage = () => {
   }, [theme]);
 
   const { data: cars, isLoading, isError, error } = useCar();
-  // console.log('Fetched cars:', cars);
-  // Normalize API response to an array for MainContent
-  const carsList = Array.isArray(cars) ? cars : (cars?.data ?? cars?.cars ?? []);
+  const {
+    data: searchedCars,
+    isLoading: isSearchLoading,
+    isError: isSearchError,
+    error: searchError,
+  } = useSearchCars(appliedSearchQuery, searchTrigger);
+
+  const currentCars = appliedSearchQuery.trim() ? searchedCars : cars;
+  const carsList = Array.isArray(currentCars)
+    ? currentCars
+    : (currentCars?.data ?? currentCars?.cars ?? []);
+
+  const loadingState = isLoading || (!!appliedSearchQuery.trim() && isSearchLoading);
+  const errorState = isError || (!!appliedSearchQuery.trim() && isSearchError);
+  const currentError = searchError || error;
 
   const handleCardClick = (slug) => navigate(`/car/${slug}`);
   const handleRentNow = (slug) => navigate(`/car/${slug}`);
+  const handleApplyFilters = () => {
+    setAppliedSearchQuery(searchQuery.trim());
+    setSearchTrigger((prev) => prev + 1);
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
       <div className="container mx-auto px-4 py-6">
         <div className="flex gap-6">
           <aside className="w-64 mx-5">
-            <Sidebar filters={filters} setFilters={setFilters} />
+            <Sidebar
+              filters={filters}
+              onFilterChange={setFilters}
+              onApplyFilters={handleApplyFilters}
+              searchQuery={searchQuery}
+              onSearchQueryChange={setSearchQuery}
+            />
           </aside>
           <main className="flex-1">
-            {isLoading && <div>Đang tải danh sách xe...</div>}
-            {isError && <div className="text-red-500">Lỗi: {error?.message || 'Không thể tải dữ liệu'}</div>}
-            {!isLoading && !isError && (
+            {loadingState && <div>Đang tải danh sách xe...</div>}
+            {errorState && <div className="text-red-500">Lỗi: {currentError?.message || 'Không thể tải dữ liệu'}</div>}
+            {!loadingState && !errorState && (
               <MainContent cars={carsList} onRentNow={handleRentNow} onCardClick={handleCardClick} />
             )}
           </main>
