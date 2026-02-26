@@ -4,6 +4,7 @@ import axios from "../../services/axiosConfig";
 import { FiEye, FiEyeOff } from "react-icons/fi";
 import Swal from "sweetalert2";
 import AuthLayout from "../../layouts/AuthLayout";
+import { logConversion } from '../../services/googleAnalytics';
 
 const Register = () => {
   const [form, setForm] = useState({
@@ -55,6 +56,9 @@ const Register = () => {
         email: form.email,
         password: form.password,
       });
+
+      // Gửi sự kiện chuyển đổi khi đăng ký thành công
+      logConversion('Registration Success', 1);
 
       await Swal.fire({
         title: "Đăng ký thành công",

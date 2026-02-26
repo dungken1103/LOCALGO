@@ -3,6 +3,7 @@ import { FaCalendarAlt, FaSpinner } from 'react-icons/fa';
 import { useRenterBookings } from '../../hooks/useBookings';
 import MyBookingCard from '../../components/booking/MyBookingCard';
 import EmptyBookingState from '../../components/booking/EmptyBookingState';
+import { logConversion } from '../../services/googleAnalytics';
 
 export default function MyBookings() {
   const [activeTab, setActiveTab] = useState('all');
@@ -55,6 +56,13 @@ export default function MyBookings() {
     return allBookings.filter(booking => booking.status === statusMap[tabId]).length;
   };
 
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+
+    // Gửi sự kiện chuyển đổi khi người dùng thay đổi tab
+    logConversion('Booking Tab Change', tabId);
+  };
+
   // Update tabs with counts
   const tabsWithCounts = tabs.map(tab => ({
     ...tab,
@@ -83,7 +91,7 @@ export default function MyBookings() {
             {tabsWithCounts.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => handleTabChange(tab.id)}
                 className={`
                   px-4 py-2 rounded-lg font-medium transition-all duration-200
                   ${activeTab === tab.id

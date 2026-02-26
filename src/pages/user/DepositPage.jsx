@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import axios from "../../services/axiosConfig";
 import { v4 as uuidv4 } from "uuid";
 import { id } from "zod/v4/locales";
+import { logConversion } from '../../services/googleAnalytics';
 
 const BANK_CODE = "TPB";
 const ACCOUNT_NO = "43311032004";
@@ -89,7 +90,10 @@ export default function DepositPage() {
       { withCredentials: true }
     );
 
-    fetchTransactions();
+    // Gửi sự kiện chuyển đổi khi nạp tiền thành công
+    logConversion('Deposit Success', parseFloat(amount));
+
+    setStatus("SUCCESS");
   };
   console.log(bookingInfo);
 

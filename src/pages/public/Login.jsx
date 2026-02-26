@@ -5,6 +5,7 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import axios from "../../services/axiosConfig";
 import { useAuth } from "../../context/AuthContext";
 import AuthLayout from "../../layouts/AuthLayout";
+import { logConversion } from '../../services/googleAnalytics';
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -40,6 +41,10 @@ const Login = () => {
       localStorage.setItem("user", JSON.stringify(user));
       localStorage.setItem('token', `Bearer ${res.data.data.token}`);
       setUser(user);
+
+      // Gửi sự kiện chuyển đổi khi đăng nhập thành công
+      logConversion('Login Success', 1);
+
       navigate("/", { replace: true });
     } catch {
       setError("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin.");

@@ -27,3 +27,12 @@ export const logScrollDepth = (depth) => {
     label: `${depth}%`,
   });
 };
+
+// Gửi sự kiện chuyển đổi
+export const logConversion = (conversionType, value) => {
+  ReactGA.event({
+    category: 'Conversion',
+    action: conversionType,
+    value,
+  });
+};
