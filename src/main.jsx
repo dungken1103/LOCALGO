@@ -11,7 +11,7 @@ import { initGA, logPageView, logScrollDepth } from './services/googleAnalytics'
 const queryClient = new QueryClient();
 
 // Khởi tạo Google Analytics với Measurement ID
-initGA('G-XXXXXXXXXX');
+initGA('G-09DG9LRV5G');
 
 // Theo dõi pageview khi ứng dụng được tải
 logPageView(window.location.pathname);
