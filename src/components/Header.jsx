@@ -5,6 +5,7 @@ import axios from "../services/axiosConfig";
 import { FaSignOutAlt } from "react-icons/fa";
 import { FiChevronDown } from "react-icons/fi";
 import useTheme from "../hooks/useTheme";
+import { logEvent } from '../services/googleAnalytics';
 
 export default function Header({ theme, toggleTheme }) {
   const navigate = useNavigate();
@@ -43,6 +44,9 @@ export default function Header({ theme, toggleTheme }) {
     } catch (error) {
       console.error("Logout failed:", error);
     }
+  };
+  const handleButtonClick = () => {
+    logEvent('Header', 'Click', 'User clicked header button');
   };
   useEffect(() => {
     function handleClickOutside(event) {
